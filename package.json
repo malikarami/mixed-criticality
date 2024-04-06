@@ -1,0 +1,26 @@
+{
+  "name": "final-project",
+  "version": "1.0.0",
+  "description": "",
+  "main": "app.js",
+  "scripts": {
+    "simulate": "tsc && node ./dist/app.js",
+    "generate": "tsc && node ./dist/generator.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "Mixed-Criticality",
+    "EDF-VD",
+    "Realtime Systems",
+    "Scheduling"
+  ],
+  "author": "Maryam Alikarami",
+  "license": "ISC",
+  "dependencies": {
+    "typescript": "^5.4.3",
+    "xml-js": "^1.6.11"
+  },
+  "devDependencies": {
+    "@types/node": "^20.12.2"
+  }
+}
