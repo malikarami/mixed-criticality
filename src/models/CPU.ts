@@ -1,7 +1,5 @@
 import {Job} from "./Job";
-import {SYSTEM} from "./System";
-import {Logger} from "./Logger";
-import {Log} from "./app";
+import {Log, CONFIG} from "../app";
 
 
 // a single core
@@ -26,8 +24,8 @@ export class CPU {
 
   run(st: number, c: number): Job | undefined {
     if (this.currentJob) {
-      this.currentJob.execute(SYSTEM._workDonePerClock);
-      Logger.printClock(c, st, this.currentJob);
+      this.currentJob.execute(CONFIG.workDonePerClock);
+      Log.printClock(c, st, this.currentJob);
 
     }
     return this.currentJob;

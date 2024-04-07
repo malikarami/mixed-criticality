@@ -1,29 +1,18 @@
-import {Job} from "./Job";
-import {ReadyQueue} from "./ReadyQueue";
-import {SYSTEM} from "./System";
-import {Scheduler} from "./Scheduler";
-
-const logOff = false;
-const logLevelSetting = {
-  utilization: true,
-  arrival: true,
-  feasibilityTest: true,
-  preemption: true,
-  overrun: true,
-  jobFinish: true,
-  deadlineMiss: true,
-  dispatch: true,
-  failure: true,
-  schedule: true,
-  readyQ: true,
-  clock: true,
-} as const;
+import {Job} from "./models/Job";
+import {ReadyQueue} from "./models/ReadyQueue";
+import {Scheduler} from "./models/Scheduler";
+import {CONFIG} from "./app";
+import {LogLevelSettings} from "./types";
 
 export class Logger {
   rQ!: ReadyQueue;
   scheduler!: Scheduler;
+  setting!: LogLevelSettings;
+  off: boolean = false;
 
-  constructor() {
+  constructor(settings: LogLevelSettings, on = true) {
+    this.off = !on;
+    this.setting = settings;
   }
 
   setUp(rQ: ReadyQueue, scheduler: Scheduler) {
@@ -32,38 +21,38 @@ export class Logger {
   }
 
   utilization(us: { U11: number; U22: number; U21: number; u: number; U12: number }) {
-    if (logOff || !logLevelSetting.utilization) return;
+    if (this.off || !this.setting.utilization) return;
     console.log(us);
   }
 
   arrival(time: number, job: Job, ignored: boolean){
-    if(logOff || !logLevelSetting.arrival) return;;
-    if (logOff) return;
+    if(this.off || !this.setting.arrival) return;;
+    if (this.off) return;
     console.log('→ job:', job.id, 'arrived at', time, ignored ? 'but is ignored': '');
   }
 
   feasibilityTest(isFeasible: boolean, policy: string){
-    if(logOff || !logLevelSetting.feasibilityTest) return;
+    if(this.off || !this.setting.feasibilityTest) return;
     console.log("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
     console.log(
       "This task set is",
       isFeasible ? "" : "not",
-      SYSTEM._traditional ? "Schedulable" : "MC-Schedulable"
+      CONFIG.traditional ? "Schedulable" : "MC-Schedulable"
     );
     console.log(
       "Strategy:",
-      SYSTEM._traditional ? "traditional-edf" : policy,
+      CONFIG.traditional ? "traditional-edf" : policy,
       "With",
-      `"${SYSTEM._overrunWatchingMechanism}"`,
+      `"${CONFIG.overrunWatchingMechanism}"`,
       "as overrun watching mechanism",
       "And",
-      `${SYSTEM._overrunProbabilityPercentage}% chance of overrun for each job`,
+      `${CONFIG.overrunProbabilityPercentage}% chance of overrun for each job`,
     );
     console.log("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
   }
 
   preemption(time: number, preempter: Job, preempted: Job){
-    if(logOff || !logLevelSetting.preemption) return;
+    if(this.off || !this.setting.preemption) return;
     console.warn(
       "---> 🚫️ ",
       preempter.id,
@@ -77,7 +66,7 @@ export class Logger {
   }
 
   overrun(time: number, overrunners: Job[], byDeadlineMiss = false){
-    if(logOff || !logLevelSetting.overrun) return;
+    if(this.off || !this.setting.overrun) return;
     console.error(
       "---> 🧨 jobs",
       overrunners.map((j) => `${j.id} (reaching WCET: ${j.minimumExecutionTime} by ${j.overrun} units overrun | d: ${j.deadline})`),
@@ -87,16 +76,16 @@ export class Logger {
       time
     );
     console.log("---> ❌ ~ MODE CHANGE ~ ❌");
-    if (this.rQ && logLevelSetting.readyQ) console.log("new readyQ:", this.rQ._toString());
+    if (this.rQ && this.setting.readyQ) console.log("new readyQ:", this.rQ._toString());
   }
 
   jobFinish(time: number, job: Job){
-    if(logOff || !logLevelSetting.jobFinish) return;
+    if(this.off || !this.setting.jobFinish) return;
     console.log("✅  job:", job.id, "is finished at time:", time);
   }
 
   deadlineMiss(time: number, jobs: Job[]){
-    if(logOff || !logLevelSetting.deadlineMiss) return;
+    if(this.off || !this.setting.deadlineMiss) return;
     console.error(
       "---> ⌛️ DEADLINE MISS at time:",
       time,
@@ -112,12 +101,12 @@ export class Logger {
   }
 
   dispatch(time: number, job: Job){
-    if(logOff || !logLevelSetting.dispatch) return;
+    if(this.off || !this.setting.dispatch) return;
     if(job) console.log('🏳️job:', job.id, 'dispatched at', time);
   }
 
   failure(time: number, jobs: Job[]){
-    if(logOff || !logLevelSetting.failure) return;
+    if(this.off || !this.setting.failure) return;
     console.error(
       "---> 🧨 jobs",
       jobs.map((j) => `${j.id} (reaching C(LO): ${j.minimumExecutionTime} by ${j.overrun} units overrun | d: ${j.deadline})`),
@@ -130,7 +119,7 @@ export class Logger {
   }
 
   schedule(){
-    if(logOff || !logLevelSetting.schedule) return;
+    if(this.off || !this.setting.schedule) return;
     if (this.scheduler) {
       console.log("~~~~~~~~~~~~~~~~~~~~~~~~~~SCHEDULE~~~~~~~~~~~~~~~~~~~~~~~~~~");
       Object.keys(this.scheduler.mapping)
@@ -146,8 +135,8 @@ export class Logger {
     }
   }
 
-  static printReadyQueue(time: number, rQ: ReadyQueue) {
-    if(logOff ||  !logLevelSetting.readyQ) return;
+  printReadyQueue(time: number, rQ: ReadyQueue) {
+    if(this.off ||  !this.setting.readyQ) return;
     console.log(rQ._toString());
   }
 
@@ -164,9 +153,9 @@ export class Logger {
     );
   }
 
-  static printClock(c: number, startTime: number, job: Job) {
-    if(logOff ||  !logLevelSetting.clock) return;
-    const timeUnitTakenByEachClock = 1 / SYSTEM._frequency;
+  printClock(c: number, startTime: number, job: Job) {
+    if(this.off ||  !this.setting.clock) return;
+    const timeUnitTakenByEachClock = 1 / CONFIG.frequency;
     console.log(
       `c${c}:`,
       "running",

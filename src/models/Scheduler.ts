@@ -1,11 +1,11 @@
 import {ReadyQueue} from "./ReadyQueue";
 import {Job} from "./Job";
 import {Task} from "./Task";
-import {HI, LO, SchedulingPolicy} from "./types";
-import {SYSTEM} from "./System";
+import {HI, LO, SchedulingPolicy} from "../types";
+import {SYSTEM} from "../System";
 import {CPU} from "./CPU";
 import {Utilization} from "./utilization";
-import {Log} from "./app";
+import {Log, CONFIG} from "../app";
 
 export class Scheduler {
   private policy: SchedulingPolicy = "edf";
@@ -52,7 +52,7 @@ export class Scheduler {
   }
 
   analyse(tasks: Task[]) {
-    const speed = SYSTEM._frequency * SYSTEM._workDonePerClock;
+    const speed = CONFIG.frequency * CONFIG.workDonePerClock;
 
     const U11 = Utilization(tasks)(LO, LO); // utilization of tasks of level LO in a LO system
     const U12 = Utilization(tasks)(LO, HI); // utilization of tasks of level LO in a HI system
@@ -64,7 +64,7 @@ export class Scheduler {
 
     const isFeasible = this.feasibilityCheck(speed)(U11, U21, U22);
 
-    if (SYSTEM._traditional || U11 + U22 <= speed) {
+    if (CONFIG.traditional || U11 + U22 <= speed) {
       this.policy = "edf";
       SYSTEM.virtualDeadlineFactor = 1;
     } else if (U11 + u <= speed) {

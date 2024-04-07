@@ -1,6 +1,7 @@
 import {Task} from "./Task";
-import {CriticalityLevel, HI, LO} from "./types";
-import {SYSTEM} from "./System";
+import {CriticalityLevel, HI, LO} from "../types";
+import {SYSTEM} from "../System";
+import {isModeChangePossible} from "../utils";
 
 export class Job {
   public id!: string;
@@ -10,6 +11,7 @@ export class Job {
   public actualExecutionTime: number; // random number to simulate real-life behavior
   private virtualDeadline: number; // for Debuging purpose
   private _task!: Task;
+  public utilization?: number;
 
   constructor(id: string, arrivalTime: number, actualExecTime: number, task: Task) {
     this._task = task;
@@ -61,7 +63,12 @@ export class Job {
   }
 
   isFinished() {
-    return this.remainingExecutionTime <= 0;
+    const finished = this.remainingExecutionTime <= 0;
+    if (finished && !this.utilization) {
+      // actual utilization (although utilization is not defined for a job, but we can use this value for calculating the average statistics)
+      this.utilization = this.executedTime / this.period;
+    }
+    return finished;
   }
 
   hasMissedDeadline(time: number): boolean {
@@ -74,7 +81,7 @@ export class Job {
   }
 
   hasOverruned(): boolean {
-    if (SYSTEM.level == LO && !SYSTEM._traditional) {
+    if (isModeChangePossible()) {
       // detect overrun at the exact time
       if (this.executedTime > this.expectedExecutionTime) return true;
       if (this.executedTime == this.expectedExecutionTime)

@@ -1,6 +1,8 @@
 import * as xml2js from "xml-js";
 import fs from "fs";
 import {SYSTEM} from "./System";
+import {LO} from "./types";
+import {CONFIG} from "./app";
 
 export function readFromXMLFile<T = unknown>(path: string): T | null{
   try {
@@ -43,4 +45,8 @@ export function writeToXMLFile<T = unknown>(path: string, obj: T) {
 export function getRandomBetweenInclusive(min: number, max: number) {
   const rand = Math.random() * (max - min) + min;
   return Number(rand.toFixed(1));
+}
+
+export function isModeChangePossible(): boolean {
+  return !CONFIG.traditional && SYSTEM.level == LO;
 }

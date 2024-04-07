@@ -1,47 +1,56 @@
-import {getRandomBetweenInclusive, readFromXMLFile, writeToXMLFile} from "./utils";
-import {Task} from "./Task";
+import {getRandomBetweenInclusive, readFromXMLFile, writeToXMLFile} from "../utils";
+import {Task} from "../models/Task";
 
-const SAVED_JOBS_DIRECTORY = ".";
+const SAVED_JOBS_DIRECTORY = "./src/jobs_data";
 
 type SavedJob = {
   id: string;
   time: number;
 };
 type SavedActualExecTimesData = {
+  duration: number;
   overrunPossibility: number;
   jobs: SavedJob[];
 } | null;
 
 export class ExecTimeGenerator {
-  duration: number;
+  savedDataDuration: number = 0;
   taskSetId: string;
   overrunPossibility: number; // percentage
   jobs: SavedJob[] = [];
 
-  constructor(duration: number, taskSet: {id: string, tasks: Task[]}, overrunPossibility: number) {
-    this.duration = duration;
+  constructor(taskSet: {id: string, tasks: Task[]}, overrunPossibility: number) {
     this.taskSetId = taskSet.id;
     this.overrunPossibility = overrunPossibility;
     this.read();
   }
 
-  save() {
+  save(currentSimulationDuration: number) {
     // console.log('DEBUG: these are your jobs', this.jobs);
-    writeToXMLFile<SavedActualExecTimesData>(this.filePath, {overrunPossibility: this.overrunPossibility, jobs: this.jobs});
+    if (currentSimulationDuration > this.savedDataDuration) {
+      writeToXMLFile<SavedActualExecTimesData>(this.filePath, {
+        overrunPossibility: this.overrunPossibility,
+        duration: currentSimulationDuration,
+        jobs: this.jobs,
+      });
+    }
   }
 
   get filePath() {
-    return `${SAVED_JOBS_DIRECTORY}/${this.taskSetId}.xml`;
+    return `${SAVED_JOBS_DIRECTORY}/${this.taskSetId}(${this.overrunPossibility}%).xml`;
   }
 
-  parse(raw: unknown) {
+  parse(raw: unknown): SavedActualExecTimesData {
     // @ts-ignore
     const ovp = raw?.overrunPossibility?._text;
     // @ts-ignore
     const jobs = raw?.jobs?.map(item => ({id: item.id._text, time: item.time._text}));
+    // @ts-ignore
+    const duration = raw?.duration?._text || 0;
     return {
       overrunPossibility: ovp,
       jobs,
+      duration,
     }
   }
 
@@ -51,6 +60,7 @@ export class ExecTimeGenerator {
     // console.log('DEBUG', data, rawData);
     if (data && data.jobs && data.overrunPossibility == this.overrunPossibility) {
       this.jobs = data.jobs;
+      this.savedDataDuration = data.duration;
     }
   }
 
