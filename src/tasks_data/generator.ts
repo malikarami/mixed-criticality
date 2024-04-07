@@ -1,8 +1,13 @@
 interface Task {
   utilization: number;
   period: number;
-  executionTime: number;
+  c: {
+    LO: number;
+    HI: number;
+  };
+  precise: number;
   deadline: number;
+  criticality: 'LO' | 'HI';
 }
 
 // UUniFast Algorithm
@@ -27,22 +32,74 @@ function logUniform(min: number, max: number, n: number): number[] {
   return periods;
 }
 
+// find n unique numbers in [min, max]
+function getRandomIntegers(n: number, min: number, max: number): number[] {
+  const randomIntegers = new Set();
+
+  while (randomIntegers.size < n) {
+    const randomInteger = Math.floor(Math.random() * (max - min + 1)) + min;
+    randomIntegers.add(randomInteger);
+  }
+
+  return Array.from(randomIntegers) as unknown as number[];
+}
+
+
+function generateFeasibleWCET(CLO:number, CF: number, D: number): number {
+  const  cf = CF > D / CLO ? D / CLO : CF;
+  return Number((CLO * cf).toFixed(1));
+}
+
+
 // Generate Task Sets
-function generateTaskSet(n: number, totalUtilization: number): Task[] {
+function generateTaskSet(n: number, totalUtilization: number, CF: number, highTasksIndexes: number[]): Task[] {
   const utilizations = uunifast(totalUtilization, n);
-  const periods = logUniform(1, 1000, n);
-  const tasks: Task[] = utilizations.map((u, index) => ({
-    utilization: u,
-    period: periods[index],
-    executionTime: u * periods[index],
-    deadline: periods[index], // Di = Ti
-  }));
+  const periods = logUniform(1, 100, n);
+  const tasks: Task[] = utilizations.map((u, index) => {
+    const deadline = periods[index]; // Di = Ti
+    const CLO = Number((u * periods[index]).toFixed(1));
+    const CHI = generateFeasibleWCET(CLO, CF, deadline);
+    const isHigh = highTasksIndexes.includes(index);
+    return {
+      utilization: u,
+      period: periods[index],
+      c: {
+        LO: CLO,
+        HI: CHI,
+      },
+      precise: u * periods[index],
+      deadline,
+      criticality: isHigh ? 'HI' : 'LO',
+      index: index,
+    };
+  });
   return tasks;
 }
 
-const n = 10; // Number of tasks
-const totalUtilization = 0.75; // Total system utilization
-const maryam = generateTaskSet(n, totalUtilization);
+const MAX_ITERATIONS = 50000;
+const  generateFeasibleTaskSet = (n: number, totalUtilization: number, CF: number, highTasksIndexes: number[]) => {
+  let iteration = 0;
+  let set: Task[];
+  do {
+    set = generateTaskSet(n, totalUtilization, CF, highTasksIndexes);
+    iteration++;
+  } while (set.some(task => !task.c.LO || !task.c.HI) && iteration < MAX_ITERATIONS);
+
+  if(set.some(task => !task.c.LO || !task.c.HI)) throw new Error(`Not able to generate a feasible task set after ${MAX_ITERATIONS} tries`);
+
+  console.log('Found a feasible task set after', iteration, 'tries');
+  return set;
+}
+
+const n = 20; // Number of tasks
+const CP = 0.5;
+const CF = 2;
+const totalUtilization = 0.9999; // Total system utilization
+const highTasksIndexes = getRandomIntegers(Math.floor(n * CP), 0, n - 1);
+
+
+console.log(highTasksIndexes);
+const maryam = generateFeasibleTaskSet(n, totalUtilization, CF, highTasksIndexes);
 
 
 export default maryam;

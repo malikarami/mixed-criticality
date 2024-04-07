@@ -33,6 +33,6 @@ export const Log = new Logger({
   clock: true,
 });
 
-new Simulator(duration, taskSet).run();
+// new Simulator(duration, taskSet).run();
 
-// console.log(maryam);
+console.log(maryam);
