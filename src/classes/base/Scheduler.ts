@@ -67,13 +67,16 @@ export class Scheduler {
     const U22 = Utilization(tasks)(HI, HI); // utilization of tasks of level HI in a HI system
     const u = U21 / (speed - U22);
 
+    // the task set itself must be feasible
+    const taskSetFeasibilityCheck = !tasks.some(t => t.c.LO > t.period || t.c.HI > t.period);
+    // necessary analysis for schedulablity
     const necessityCheck = this.necessityCheck(speed)({U11, U21, U22});
-    // no need for feasibility check when the taskset can not pass the necessity check, but we do it nonetheless
+    // no need for feasibility check when the tas kset can not pass the necessity check, but we do it nonetheless
     const feasibilityCheck = this.feasibilityCheck(speed)({U11, U22, u});
 
-    Log.utilization({U11, U12, U21, U22, u, necessityCheck, feasibilityCheck});
+    Log.utilization({U11, U12, U21, U22, u, necessityCheck, feasibilityCheck, taskSetFeasibilityCheck});
 
-    const isFeasible = necessityCheck && feasibilityCheck;
+    const isFeasible = taskSetFeasibilityCheck &&  necessityCheck && feasibilityCheck;
 
     if (CONFIG.traditional || U11 + U22 <= speed) {
       this.policy = "edf";

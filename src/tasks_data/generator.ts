@@ -5,7 +5,10 @@ interface Task {
     LO: number;
     HI: number;
   };
-  precise: number;
+  precise: {
+    c: number;
+    u: number;
+  };
   deadline: number;
   criticality: 'LO' | 'HI';
 }
@@ -45,6 +48,7 @@ function getRandomIntegers(n: number, min: number, max: number): number[] {
 }
 
 
+// generate a CHI that is smaller than the period
 function generateFeasibleWCET(CLO:number, CF: number, D: number): number {
   const  cf = CF > D / CLO ? D / CLO : CF;
   return Number((CLO * cf).toFixed(1));
@@ -61,19 +65,28 @@ function generateTaskSet(n: number, totalUtilization: number, CF: number, highTa
     const CHI = generateFeasibleWCET(CLO, CF, deadline);
     const isHigh = highTasksIndexes.includes(index);
     return {
-      utilization: u,
+      utilization: CLO / deadline, // D = T
       period: periods[index],
       c: {
         LO: CLO,
         HI: CHI,
       },
-      precise: u * periods[index],
-      deadline,
+      precise: { // precise value before rounding the CLO to a 0.1 precision
+        u,
+        c: u * periods[index],
+      },
+      deadline, // D = T
       criticality: isHigh ? 'HI' : 'LO',
       index: index,
     };
   });
   return tasks;
+}
+
+const getTotalUtilization = (set: Task[]): number => {
+  return set.reduce((previousValue: number, currentValue) => {
+    return currentValue.utilization + previousValue;
+  }, 0);
 }
 
 const MAX_ITERATIONS = 50000;
@@ -87,7 +100,7 @@ const  generateFeasibleTaskSet = (n: number, totalUtilization: number, CF: numbe
 
   if(set.some(task => !task.c.LO || !task.c.HI)) throw new Error(`Not able to generate a feasible task set after ${MAX_ITERATIONS} tries`);
 
-  console.log('Found a feasible task set after', iteration, 'tries');
+  console.log('DEBUG: Found a feasible task set after', iteration, 'tries with actual utilization of:', getTotalUtilization(set), 'instead of:', totalUtilization);
   return set;
 }
 
@@ -98,7 +111,7 @@ const totalUtilization = 0.9999; // Total system utilization
 const highTasksIndexes = getRandomIntegers(Math.floor(n * CP), 0, n - 1);
 
 
-console.log(highTasksIndexes);
+console.log('DEBUG:', highTasksIndexes);
 const maryam = generateFeasibleTaskSet(n, totalUtilization, CF, highTasksIndexes);
 
 

@@ -14,6 +14,10 @@ export const CONFIG: Config = {
 };
 // read-only
 Object.freeze(CONFIG);
+//
+// export const TASKSET_CONFIG: TaskSetConfig = {
+//
+// }
 
 const duration = 40;
 const taskSet = mcsTasksetSimple;
