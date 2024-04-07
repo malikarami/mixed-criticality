@@ -2,7 +2,6 @@
   "name": "final-project",
   "version": "1.0.0",
   "description": "",
-  "main": "app.js",
   "scripts": {
     "simulate": "tsc && node ./dist/app.js",
     "generate": "tsc && node ./dist/generator.js",
@@ -21,6 +20,7 @@
     "xml-js": "^1.6.11"
   },
   "devDependencies": {
-    "@types/node": "^20.12.2"
+    "@types/node": "^20.12.2",
+    "prettier": "^3.2.5"
   }
 }
