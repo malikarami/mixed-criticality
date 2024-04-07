@@ -2,9 +2,10 @@ import {Simulator} from "./classes/Simulator";
 import {mcsTasksetSimple} from "./tasks_data/samples";
 import {Config} from "./types";
 import {Logger} from "./classes/Logger";
+import maryam from "./tasks_data/generator";
 
 export const CONFIG: Config = {
-  overrunProbabilityPercentage: 0, // probability of actual C to be grater than C(LO)
+  overrunProbabilityPercentage: 100, // probability of actual C to be grater than C(LO)
   exactOverrunTime: 1,
   overrunWatchingMechanism: "per_clock",
   traditional: false, // traditional EDF instead of EDF-VD
@@ -33,3 +34,5 @@ export const Log = new Logger({
 });
 
 new Simulator(duration, taskSet).run();
+
+// console.log(maryam);

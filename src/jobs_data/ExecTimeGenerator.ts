@@ -73,8 +73,10 @@ export class ExecTimeGenerator {
     if (savedJob) return Number(savedJob.time);
     else {
       const random = Math.random();
-      const shouldOverrun = random <= this.overrunPossibility / 100;
-      const generatedActualExecTime = shouldOverrun ? getRandomBetweenInclusive(task.c.LO + 0.1, task.c.HI) : getRandomBetweenInclusive(task.c.LO / 2, task.c.LO);
+      const shouldOverrun = random < this.overrunPossibility / 100;
+      // for some task sets, CHI is zero for Lo tasks
+      const cap = task.c.HI ? task.c.HI : task.c.LO + 0.1;
+      const generatedActualExecTime = shouldOverrun ? getRandomBetweenInclusive(task.c.LO, cap) : getRandomBetweenInclusive(task.c.LO / 2, task.c.LO);
       this.saveNewJobs({id: jobId, time: generatedActualExecTime})
       return generatedActualExecTime;
     }

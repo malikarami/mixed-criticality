@@ -20,7 +20,7 @@ export class Logger {
     this.scheduler = scheduler;
   }
 
-  utilization(us: { U11: number; U22: number; U21: number; u: number; U12: number }) {
+  utilization(us: { U11: number; U22: number; U21: number; u: number; U12: number, necessityCheck: boolean, feasibilityCheck: boolean }) {
     if (this.off || !this.setting.utilization) return;
     console.log(us);
   }

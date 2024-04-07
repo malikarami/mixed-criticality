@@ -44,9 +44,16 @@ export class Scheduler {
     return job;
   }
 
-  feasibilityCheck(speed: number) {
-    return (U11: number, U21: number, U22: number): boolean => {
+  necessityCheck(speed: number) {
+    return ({U11, U21, U22}: {U11: number, U21: number, U22: number}): boolean => {
       if (U11 + U21 <= speed && U22 <= speed) return true;
+      return false;
+    };
+  }
+
+  feasibilityCheck(speed: number) {
+    return ({U11, U22, u}:{U11: number, U22: number, u: number}): boolean => {
+      if (U11 + U22 <= speed || U11 + u <= speed) return true;
       return false;
     };
   }
@@ -60,9 +67,13 @@ export class Scheduler {
     const U22 = Utilization(tasks)(HI, HI); // utilization of tasks of level HI in a HI system
     const u = U21 / (speed - U22);
 
-    Log.utilization({U11, U12, U21, U22, u});
+    const necessityCheck = this.necessityCheck(speed)({U11, U21, U22});
+    // no need for feasibility check when the taskset can not pass the necessity check, but we do it nonetheless
+    const feasibilityCheck = this.feasibilityCheck(speed)({U11, U22, u});
 
-    const isFeasible = this.feasibilityCheck(speed)(U11, U21, U22);
+    Log.utilization({U11, U12, U21, U22, u, necessityCheck, feasibilityCheck});
+
+    const isFeasible = necessityCheck && feasibilityCheck;
 
     if (CONFIG.traditional || U11 + U22 <= speed) {
       this.policy = "edf";

@@ -42,5 +42,7 @@ function generateTaskSet(n: number, totalUtilization: number): Task[] {
 
 const n = 10; // Number of tasks
 const totalUtilization = 0.75; // Total system utilization
-const taskSet = generateTaskSet(n, totalUtilization);
-console.log(taskSet);
+const maryam = generateTaskSet(n, totalUtilization);
+
+
+export default maryam;
