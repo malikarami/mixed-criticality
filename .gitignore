@@ -61,3 +61,7 @@ dist
 *.pem
 yarn.lock
 *.zip
+
+
+#unsaved format of the report
+~$report.docx
