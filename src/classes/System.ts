@@ -1,4 +1,4 @@
-import {CriticalityLevel, LO} from "./types";
+import {CriticalityLevel, LO} from "../types";
 
 // system can also be defined as a class
 type System = {

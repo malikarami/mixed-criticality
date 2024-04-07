@@ -1,6 +1,6 @@
-import {CriticalityLevel, ExecutionTime, TaskInitiator} from "../types";
+import {CriticalityLevel, ExecutionTime, TaskInitiator} from "../../types";
 import {Job} from "./Job";
-import {ExecTimeGenerator} from "../jobs_data/ExecTimeGenerator";
+import {ExecTimeGenerator} from "../../jobs_data/ExecTimeGenerator";
 
 export class Task {
   readonly period!: number;

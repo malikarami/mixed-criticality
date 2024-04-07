@@ -1,11 +1,11 @@
 import {ReadyQueue} from "./ReadyQueue";
 import {Job} from "./Job";
 import {Task} from "./Task";
-import {HI, LO, SchedulingPolicy} from "../types";
+import {HI, LO, SchedulingPolicy} from "../../types";
 import {SYSTEM} from "../System";
 import {CPU} from "./CPU";
 import {Utilization} from "./utilization";
-import {Log, CONFIG} from "../app";
+import {Log, CONFIG} from "../../app";
 
 export class Scheduler {
   private policy: SchedulingPolicy = "edf";

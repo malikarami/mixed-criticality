@@ -1,7 +1,7 @@
-import {Simulator} from "./Simulator";
+import {Simulator} from "./classes/Simulator";
 import {mcsTasksetSimple} from "./tasks_data/samples";
 import {Config} from "./types";
-import {Logger} from "./Logger";
+import {Logger} from "./classes/Logger";
 
 export const CONFIG: Config = {
   overrunProbabilityPercentage: 0, // probability of actual C to be grater than C(LO)

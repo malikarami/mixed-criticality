@@ -1,5 +1,5 @@
 import {Job} from "./Job";
-import {LO} from "../types";
+import {LO} from "../../types";
 
 export class ReadyQueue {
   private jobs: Job[] = [];

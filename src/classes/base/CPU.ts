@@ -1,5 +1,5 @@
 import {Job} from "./Job";
-import {Log, CONFIG} from "../app";
+import {Log, CONFIG} from "../../app";
 
 
 // a single core

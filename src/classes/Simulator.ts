@@ -1,14 +1,14 @@
-import {Task} from "./models/Task";
-import {Job} from "./models/Job";
-import {HI, LO} from "./types";
-import {ReadyQueue} from "./models/ReadyQueue";
-import {Scheduler} from "./models/Scheduler";
-import {CPU} from "./models/CPU";
+import {Task} from "./base/Task";
+import {Job} from "./base/Job";
+import {HI, LO} from "../types";
+import {ReadyQueue} from "./base/ReadyQueue";
+import {Scheduler} from "./base/Scheduler";
+import {CPU} from "./base/CPU";
 import {SYSTEM} from "./System";
-import {ExecTimeGenerator} from "./jobs_data/ExecTimeGenerator";
+import {ExecTimeGenerator} from "../jobs_data/ExecTimeGenerator";
 import {Logger} from "./Logger";
-import {Log, CONFIG} from "./app";
-import {isModeChangePossible} from "./utils";
+import {Log, CONFIG} from "../app";
+import {isModeChangePossible} from "../utils";
 
 export class Simulator {
   private time: number = 0; // system time

@@ -1,7 +1,7 @@
 import {Task} from "./Task";
-import {CriticalityLevel, HI, LO} from "../types";
+import {CriticalityLevel, HI, LO} from "../../types";
 import {SYSTEM} from "../System";
-import {isModeChangePossible} from "../utils";
+import {isModeChangePossible} from "../../utils";
 
 export class Job {
   public id!: string;

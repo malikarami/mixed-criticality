@@ -1,4 +1,4 @@
-import {Task} from "../models/Task";
+import {Task} from "../classes/base/Task";
 import {HI, LO} from "../types";
 
 const preemptiveTaskSet = {

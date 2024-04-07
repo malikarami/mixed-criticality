@@ -1,5 +1,5 @@
 import {getRandomBetweenInclusive, readFromXMLFile, writeToXMLFile} from "../utils";
-import {Task} from "../models/Task";
+import {Task} from "../classes/base/Task";
 
 const SAVED_JOBS_DIRECTORY = "./src/jobs_data";
 

@@ -1,8 +1,8 @@
-import {Job} from "./models/Job";
-import {ReadyQueue} from "./models/ReadyQueue";
-import {Scheduler} from "./models/Scheduler";
-import {CONFIG} from "./app";
-import {LogLevelSettings} from "./types";
+import {Job} from "./base/Job";
+import {ReadyQueue} from "./base/ReadyQueue";
+import {Scheduler} from "./base/Scheduler";
+import {CONFIG} from "../app";
+import {LogLevelSettings} from "../types";
 
 export class Logger {
   rQ!: ReadyQueue;

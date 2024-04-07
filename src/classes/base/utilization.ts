@@ -1,5 +1,5 @@
 import {Task} from "./Task";
-import {CriticalityLevel} from "../types";
+import {CriticalityLevel} from "../../types";
 
 export const Utilization =
   (taskSet: Task[]) =>

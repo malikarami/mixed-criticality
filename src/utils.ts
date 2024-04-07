@@ -1,6 +1,6 @@
 import * as xml2js from "xml-js";
 import fs from "fs";
-import {SYSTEM} from "./System";
+import {SYSTEM} from "./classes/System";
 import {LO} from "./types";
 import {CONFIG} from "./app";
 
