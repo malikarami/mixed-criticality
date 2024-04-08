@@ -1,4 +1,7 @@
-interface Task {
+import {TaskSetConfig, LO, HI, CriticalityLevel, TaskSetInitiator, TaskInitiator} from "../types";
+import {readFromXMLFile, writeToXMLFile} from "../utils";
+
+interface NewTask {
   utilization: number;
   period: number;
   c: {
@@ -10,8 +13,14 @@ interface Task {
     u: number;
   };
   deadline: number;
-  criticality: 'LO' | 'HI';
+  level: CriticalityLevel;
 }
+
+interface SavedTasksData {
+  id: string;
+  tasks: NewTask[];
+}
+
 
 // UUniFast Algorithm
 function uunifast(totalUtilization: number, n: number): number[] {
@@ -56,17 +65,17 @@ function generateFeasibleWCET(CLO:number, CF: number, D: number): number {
 
 
 // Generate Task Sets
-function generateTaskSet(n: number, totalUtilization: number, CF: number, highTasksIndexes: number[]): Task[] {
+function generateRandomTaskSet(n: number, totalUtilization: number, CF: number, highTasksIndexes: number[]): NewTask[] {
   const utilizations = uunifast(totalUtilization, n);
   const periods = logUniform(1, 100, n);
-  const tasks: Task[] = utilizations.map((u, index) => {
-    const deadline = periods[index]; // Di = Ti
+  const tasks: NewTask[] = utilizations.map((u, index) => {
+    const period = periods[index]; // Di = Ti
     const CLO = Number((u * periods[index]).toFixed(1));
-    const CHI = generateFeasibleWCET(CLO, CF, deadline);
+    const CHI = generateFeasibleWCET(CLO, CF, period);
     const isHigh = highTasksIndexes.includes(index);
     return {
-      utilization: CLO / deadline, // D = T
-      period: periods[index],
+      utilization: CLO / period, // D = T
+      period,
       c: {
         LO: CLO,
         HI: CHI,
@@ -75,15 +84,15 @@ function generateTaskSet(n: number, totalUtilization: number, CF: number, highTa
         u,
         c: u * periods[index],
       },
-      deadline, // D = T
-      criticality: isHigh ? 'HI' : 'LO',
+      deadline: period, // D = T
+      level: isHigh ? HI : LO,
       index: index,
     };
   });
   return tasks;
 }
 
-const getTotalUtilization = (set: Task[]): number => {
+const getTotalUtilization = (set: NewTask[]): number => {
   return set.reduce((previousValue: number, currentValue) => {
     return currentValue.utilization + previousValue;
   }, 0);
@@ -91,28 +100,83 @@ const getTotalUtilization = (set: Task[]): number => {
 
 const MAX_ITERATIONS = 50000;
 const  generateFeasibleTaskSet = (n: number, totalUtilization: number, CF: number, highTasksIndexes: number[]) => {
-  let iteration = 0;
-  let set: Task[];
-  do {
-    set = generateTaskSet(n, totalUtilization, CF, highTasksIndexes);
-    iteration++;
-  } while (set.some(task => !task.c.LO || !task.c.HI) && iteration < MAX_ITERATIONS);
+  if(CF < 1) throw new Error(`Criticality factor should be greater than 1`);
 
-  if(set.some(task => !task.c.LO || !task.c.HI)) throw new Error(`Not able to generate a feasible task set after ${MAX_ITERATIONS} tries`);
+  let iteration = 0;
+  let set: NewTask[];
+  do {
+    set = generateRandomTaskSet(n, totalUtilization, CF, highTasksIndexes);
+    iteration++;
+  } while (set.some(task => !task.c.LO || !task.c.HI || task.c.LO > task.period || task.c.HI > task.period) && iteration < MAX_ITERATIONS);
+
+  if(set.some(task => !task.c.LO || !task.c.HI || task.c.LO > task.period || task.c.HI > task.period)) throw new Error(`Not able to generate a feasible task set after ${MAX_ITERATIONS} tries`);
 
   console.log('DEBUG: Found a feasible task set after', iteration, 'tries with actual utilization of:', getTotalUtilization(set), 'instead of:', totalUtilization);
   return set;
 }
 
-const n = 20; // Number of tasks
-const CP = 0.5;
-const CF = 2;
-const totalUtilization = 0.9999; // Total system utilization
-const highTasksIndexes = getRandomIntegers(Math.floor(n * CP), 0, n - 1);
+
+const TASKS_DIRECTORY = "./src/tasks_data";
+
+function parseXMLData(data: Record<string, any>): SavedTasksData {
+  const id = data?.id?._text;
+  const tasks = data?.tasks?.map((t: Record<string, any>) => ({
+    utilization: Number(t?.utilization?._text),
+    period: Number(t?.period?._text),
+    c: {
+      LO: Number(t?.c?.LO?._text),
+      HI: Number(t?.c?.HI?._text),
+    },
+    precise: {
+      c: Number(t?.precise?.c?._text),
+      u: Number(t?.precise?.u?._text),
+    },
+    deadline: Number(t?.deadline?._text),
+    level: t?.level?._text,
+  }))
+  return {
+    id, tasks
+  }
+}
 
 
-console.log('DEBUG:', highTasksIndexes);
-const maryam = generateFeasibleTaskSet(n, totalUtilization, CF, highTasksIndexes);
+function convertToSimulatorTaskSetFormat(data: SavedTasksData) : TaskSetInitiator {
+  const tasks: TaskInitiator[] = data.tasks.map((t, index) => ({
+      period: t.period,
+      utilization: t.utilization,
+      id: `${index + 1}`,
+      level: t.level,
+      c: t.c,
+      deadline: t.deadline,
+    }));
+  return {
+    id: data.id,
+    tasks,
+  };
+}
 
+const generateTaskSet = (config: TaskSetConfig): TaskSetInitiator => {
+  const {n, CP, CF, u} = config;
+  const id = `${n}-${u}-${CF}-${CP}`;
+  const path = `${TASKS_DIRECTORY}/${id}.xml`;
 
-export default maryam;
+  const savedData: Record<string, any> | null = readFromXMLFile(path);
+  const data = savedData ?  parseXMLData(savedData) : undefined;
+
+  if(data && data.tasks && data.id === id ){
+    console.log('DEBUG:', data.tasks);
+    console.log('task set loaded from', path);
+    return convertToSimulatorTaskSetFormat(data);
+  }
+  else {
+    const highTasksIndexes = getRandomIntegers(Math.floor(n * CP), 0, n - 1);
+    // console.log('DEBUG:', highTasksIndexes);
+    const tasks = generateFeasibleTaskSet(n, u, CF, highTasksIndexes);
+    writeToXMLFile<SavedTasksData>(path, {tasks, id});
+    // console.log('DEBUG:', tasks);
+    console.log('task set generated to', path);
+    return convertToSimulatorTaskSetFormat({tasks, id});
+  }
+}
+
+export default generateTaskSet;

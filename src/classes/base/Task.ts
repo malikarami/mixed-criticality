@@ -3,13 +3,16 @@ import {Job} from "./Job";
 import {ExecTimeGenerator} from "../../jobs_data/ExecTimeGenerator";
 
 export class Task {
+  // mandatory initiatives
   readonly period!: number;
-  readonly taskSetId!: string;
+  readonly utilization!: number;
   readonly id!: string;
   readonly level!: CriticalityLevel;
   readonly c!: ExecutionTime;
   readonly deadline!: number;
+  // extra information
   readonly phase!: number;
+  private taskSetId!: string;
   private jobs: Job[] = [];
 
   constructor(initiator: TaskInitiator, setId = '') {

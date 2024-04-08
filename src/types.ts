@@ -1,3 +1,5 @@
+import {Task} from "./classes/base/Task";
+
 export const LO = "LO";
 export const HI = "HI";
 
@@ -8,14 +10,12 @@ export type ExecutionTime = {
   HI: number;
 };
 
-export type TaskInitiator = {
+export type TaskInitiator = Pick<Task, 'period' | 'utilization' | 'c' | 'id' | 'deadline' | 'level'> & {phase?: number};
+
+export type TaskSetInitiator = {
+  tasks: TaskInitiator[];
   id: string;
-  period: number; // Int
-  c: ExecutionTime; // Float
-  level: CriticalityLevel;
-  deadline?: number; // Float
-  phase?: number;
-};
+}
 
 export type Config = {
   traditional: boolean;
@@ -23,7 +23,6 @@ export type Config = {
   workDonePerClock: 0.1 | 1; // note that if you set this value to 1, all of the execution times in your system will also be set to integers. this is a kind of stepper for
   frequency: number;
   overrunWatchingMechanism: "per_clock" | "per_execution";
-  overrunProbabilityPercentage: number;
   exactOverrunTime: number;
 };
 
@@ -41,3 +40,10 @@ export type LogLevelSettings = {
   readyQ: boolean;
   clock: boolean;
 };
+
+export type TaskSetConfig = {
+  n: number; // number of tasks
+  u: number; // total system utilization
+  CP: number; // criticality proportion
+  CF: number; // criticality factor, > 1
+}

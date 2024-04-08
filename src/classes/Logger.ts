@@ -45,8 +45,6 @@ export class Logger {
       "With",
       `"${CONFIG.overrunWatchingMechanism}"`,
       "as overrun watching mechanism",
-      "And",
-      `${CONFIG.overrunProbabilityPercentage}% chance of overrun for each job`,
     );
     console.log("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
   }

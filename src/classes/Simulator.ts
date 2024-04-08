@@ -1,6 +1,6 @@
 import {Task} from "./base/Task";
 import {Job} from "./base/Job";
-import {HI, LO} from "../types";
+import {HI, LO, TaskInitiator, TaskSetInitiator} from "../types";
 import {ReadyQueue} from "./base/ReadyQueue";
 import {Scheduler} from "./base/Scheduler";
 import {CPU} from "./base/CPU";
@@ -12,27 +12,31 @@ import {isModeChangePossible} from "../utils";
 
 export class Simulator {
   private time: number = 0; // system time
-  private taskSet!: Task[];
   private cpu!: CPU; // can be changed to an array of CPUs => in that case you may want to rename CPU to Core
   private scheduler: Scheduler;
   private readyQ!: ReadyQueue;
   private DURATION!: number;
-  private taskSetId: string;
+  private taskSet!: {
+    id: string;
+    tasks: Task[];
+  }
   private execTimeGenerator: ExecTimeGenerator;
 
-  constructor(duration: number, taskSet: { tasks: Task[]; id: string }) {
+  private generateTasksSet(set: TaskSetInitiator): { id: string; tasks: Task[] } {
+    return {id: set.id, tasks: set.tasks.map(t => new Task(t, set.id))}
+  }
+  constructor(duration: number, overrunProbabilityPercentage: number, taskSet: TaskSetInitiator) {
     this.DURATION = duration;
     this.cpu = new CPU(CONFIG.frequency);
     this.readyQ = new ReadyQueue();
-    this.taskSet = taskSet.tasks;
-    this.taskSetId = taskSet.id;
+    this.taskSet = this.generateTasksSet(taskSet);
     this.scheduler = new Scheduler(this.readyQ, this.cpu);
-    this.execTimeGenerator = new ExecTimeGenerator(taskSet, CONFIG.overrunProbabilityPercentage);
+    this.execTimeGenerator = new ExecTimeGenerator(this.taskSet, overrunProbabilityPercentage);
     Log.setUp(this.readyQ, this.scheduler);
   }
 
   run() {
-    this.scheduler.analyse(this.taskSet); // analyse the task set for feasibilty and determining policy
+    this.scheduler.analyse(this.taskSet.tasks); // analyse the task set for feasibilty and determining policy
     for (this.time; this.time < this.DURATION; this.time++) {
       Logger.printDivider(this.time);
       this.checkJobArrivals();
@@ -142,7 +146,7 @@ export class Simulator {
 
   checkJobArrivals() {
     let anyJobArrived = false;
-    this.taskSet.forEach((task) => {
+    this.taskSet.tasks.forEach((task) => {
       // condition for generating jobs is checked inside each task
       const job =  task.generateJob(this.time, this.execTimeGenerator);
       if(job) {
@@ -169,6 +173,4 @@ export class Simulator {
       this.scheduler.dispatch(this.time);
     }
   }
-
-
 }
