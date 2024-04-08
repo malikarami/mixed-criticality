@@ -74,14 +74,14 @@ export class Scheduler {
     // no need for feasibility check when the tas kset can not pass the necessity check, but we do it nonetheless
     const feasibilityCheck = this.feasibilityCheck(speed)({U11, U22, u});
 
-    Log.utilization({U11, U12, U21, U22, u, necessityCheck, feasibilityCheck, taskSetFeasibilityCheck});
+    Log.utilization({speed, U11, U12, U21, U22, u, taskSetFeasibilityCheck, necessityCheck, feasibilityCheck});
 
     const isFeasible = taskSetFeasibilityCheck &&  necessityCheck && feasibilityCheck;
 
     if (CONFIG.traditional || U11 + U22 <= speed) {
       this.policy = "edf";
       SYSTEM.virtualDeadlineFactor = 1;
-    } else if (U11 + u <= speed) {
+    } else if (U11 + u <= speed && u > 0) {
       SYSTEM.virtualDeadlineFactor = u;
       this.policy = "edf-vd";
     }

@@ -13,9 +13,9 @@ export const Log = new Logger({
   deadlineMiss: true,
   dispatch: true,
   failure: true,
-  schedule: true,
+  schedule: false,
   readyQ: true,
-  clock: true,
+  clock: false,
 });
 
 
@@ -35,7 +35,7 @@ export const CONFIG: Config = {
   overrunWatchingMechanism: "per_clock",
   traditional: false, // traditional EDF instead of EDF-VD
   workDonePerClock: 0.1, // indicating amount of work done in each clock -> main purpose: customizing the simulation for floating point values (example: a CPU with speed less than one)
-  frequency: 5, // f clock per time unit => (f * wpc) operation done in time unit = CPU Speed
+  frequency: 50, // f clock per time unit => (f * wpc) operation done in time unit = CPU Speed
 };
 // read-only
 Object.freeze(CONFIG);

@@ -20,7 +20,7 @@ export class Logger {
     this.scheduler = scheduler;
   }
 
-  utilization(data: { U11: number; U22: number; U21: number; u: number; U12: number, necessityCheck: boolean, feasibilityCheck: boolean, taskSetFeasibilityCheck: boolean }) {
+  utilization(data: { speed: number, U11: number; U22: number; U21: number; u: number; U12: number, necessityCheck: boolean, feasibilityCheck: boolean, taskSetFeasibilityCheck: boolean }) {
     if (this.off || !this.setting.utilization) return;
     console.log(data);
   }
