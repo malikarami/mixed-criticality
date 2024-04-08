@@ -24,6 +24,7 @@ export type Config = {
   frequency: number;
   overrunWatchingMechanism: "per_clock" | "per_execution";
   exactOverrunTime: number;
+  initialSystemLevel: CriticalityLevel;
 };
 
 export type LogLevelSettings = {

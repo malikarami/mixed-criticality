@@ -51,7 +51,7 @@ export class Scheduler {
     };
   }
 
-  feasibilityCheck(speed: number) {
+  schedulabilityCheck(speed: number) {
     return ({U11, U22, u}:{U11: number, U22: number, u: number}): boolean => {
       if (U11 + U22 <= speed || U11 + u <= speed) return true;
       return false;
@@ -72,11 +72,11 @@ export class Scheduler {
     // necessary analysis for schedulablity
     const necessityCheck = this.necessityCheck(speed)({U11, U21, U22});
     // no need for feasibility check when the tas kset can not pass the necessity check, but we do it nonetheless
-    const feasibilityCheck = this.feasibilityCheck(speed)({U11, U22, u});
+    const schedulabilityCheck = this.schedulabilityCheck(speed)({U11, U22, u});
 
-    Log.utilization({speed, U11, U12, U21, U22, u, taskSetFeasibilityCheck, necessityCheck, feasibilityCheck});
+    Log.utilization({speed, U11, U12, U21, U22, u, taskSetFeasibilityCheck, necessityCheck, schedulabilityCheck});
 
-    const isFeasible = taskSetFeasibilityCheck &&  necessityCheck && feasibilityCheck;
+    const isFeasible = taskSetFeasibilityCheck &&  necessityCheck && schedulabilityCheck;
 
     if (CONFIG.traditional || U11 + U22 <= speed) {
       this.policy = "edf";

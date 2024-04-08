@@ -1,0 +1,24 @@
+<root>
+    <overrunPossibility>50</overrunPossibility>
+    <duration>8</duration>
+    <jobs>
+        <id>1-0</id>
+        <time>6.8</time>
+    </jobs>
+    <jobs>
+        <id>2-0</id>
+        <time>1.3</time>
+    </jobs>
+    <jobs>
+        <id>2-1</id>
+        <time>0.9</time>
+    </jobs>
+    <jobs>
+        <id>2-2</id>
+        <time>1.6</time>
+    </jobs>
+    <jobs>
+        <id>2-3</id>
+        <time>1.3</time>
+    </jobs>
+</root>

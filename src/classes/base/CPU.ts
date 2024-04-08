@@ -23,10 +23,12 @@ export class CPU {
   }
 
   run(st: number, c: number): Job | undefined {
+    const timeUnitTakenByEachClock = 1 / CONFIG.frequency;
+    const start = Number((st + timeUnitTakenByEachClock * c).toFixed(1))
+    const end = Number((st + timeUnitTakenByEachClock * (c +1)).toFixed(1))
     if (this.currentJob) {
-      this.currentJob.execute(CONFIG.workDonePerClock);
-      Log.printClock(c, st, this.currentJob);
-
+      this.currentJob.execute(CONFIG.workDonePerClock, end);
+      Log.printClock(c, start, end, this.currentJob);
     }
     return this.currentJob;
   }

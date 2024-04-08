@@ -1,6 +1,6 @@
 import {Task} from "./base/Task";
 import {Job} from "./base/Job";
-import {HI, LO, TaskInitiator, TaskSetInitiator} from "../types";
+import {HI, TaskSetInitiator} from "../types";
 import {ReadyQueue} from "./base/ReadyQueue";
 import {Scheduler} from "./base/Scheduler";
 import {CPU} from "./base/CPU";
@@ -26,13 +26,14 @@ export class Simulator {
     return {id: set.id, tasks: set.tasks.map(t => new Task(t, set.id))}
   }
   constructor(duration: number, overrunProbabilityPercentage: number, taskSet: TaskSetInitiator) {
+    SYSTEM.level = CONFIG.initialSystemLevel;
     this.DURATION = duration;
     this.cpu = new CPU(CONFIG.frequency);
     this.readyQ = new ReadyQueue();
     this.taskSet = this.generateTasksSet(taskSet);
     this.scheduler = new Scheduler(this.readyQ, this.cpu);
-    this.execTimeGenerator = new ExecTimeGenerator(this.taskSet, overrunProbabilityPercentage);
-    Log.setUp(this.readyQ, this.scheduler);
+    this.execTimeGenerator = new ExecTimeGenerator(this.taskSet, overrunProbabilityPercentage, CONFIG.exactOverrunTime);
+    Log.setUp(this.readyQ, this.scheduler, this.taskSet, {...CONFIG, overrunProbabilityPercentage, duration});
   }
 
   run() {
@@ -44,8 +45,7 @@ export class Simulator {
       this.runTimeMonitorPerTimeUnit();
       Logger.printDivider();
     }
-    Log.schedule();
-    this.execTimeGenerator.save(this.DURATION);
+    this.finishHandler('success');
   }
 
   overrunHandler(
@@ -54,16 +54,25 @@ export class Simulator {
     options: {
       dispatch: boolean;
       deadlineMiss?: boolean;
+      forceOverrun?: boolean;
     }
   ) {
-    if (!isModeChangePossible()) return;
-    SYSTEM.level = HI;
-    this.readyQ.abortLoTasks();
-    if (options.dispatch) {
-      this.scheduler.schedule();
-      this.scheduler.dispatch(time);
+    const overrun = () => {
+      SYSTEM.level = HI;
+      this.readyQ.abortLoTasks();
+      Log.overrun(time, jobs, options.deadlineMiss, options.forceOverrun);
+      if (options.dispatch) {
+        this.scheduler.schedule();
+        this.scheduler.dispatch(time);
+      }
     }
-    Log.overrun(time, jobs, options.deadlineMiss);
+
+    if (!isModeChangePossible()) return;
+    if(options.forceOverrun) {
+      overrun();
+      return;
+    }
+    overrun();
   }
 
   jobFinishHandler(job: Job, time: number, options: { dispatch: boolean }) {
@@ -75,10 +84,16 @@ export class Simulator {
     }
   }
 
-  failureHandler(jobs: Job[], time: number) {
-    Log.failure(time, jobs);
-    this.execTimeGenerator.save(this.DURATION);
-    throw new Error("system failed!");
+  finishHandler(status: 'fail' | 'success', jobs?: Job[], time?: number) {
+    const save = () => {     this.execTimeGenerator.save(this.DURATION); Log.save(status);}
+    if(status === 'fail' && jobs && time) {
+      Log.failure(time, jobs);
+      save();
+      throw new Error("system failed!");
+    } else {
+      Log.schedule();
+      save();
+    }
   }
 
   // no need for calling schedule as it is called inside time loop for each execution
@@ -91,7 +106,7 @@ export class Simulator {
       .getDeadlineMisses(elapsedTime)
       .filter((j) => j.level == HI);
     if (highCriticalityDeadlineMisses.length && !isModeChangePossible())
-      this.failureHandler(highCriticalityDeadlineMisses, elapsedTime);
+      this.finishHandler('fail', highCriticalityDeadlineMisses, elapsedTime);
 
     // check for overruns
     if (isModeChangePossible()) {
@@ -141,6 +156,11 @@ export class Simulator {
       if (job.isFinished()) {
         simulator.jobFinishHandler(job, elapsedTime, { dispatch: true });
       }
+
+      if(CONFIG.exactOverrunTime && elapsedTime >= CONFIG.exactOverrunTime) simulator.overrunHandler([], elapsedTime, {
+        dispatch: true,
+        forceOverrun: true,
+      })
     };
   }
 
@@ -148,7 +168,7 @@ export class Simulator {
     let anyJobArrived = false;
     this.taskSet.tasks.forEach((task) => {
       // condition for generating jobs is checked inside each task
-      const job =  task.generateJob(this.time, this.execTimeGenerator);
+      const job = task.generateJob(this.time, this.execTimeGenerator);
       if(job) {
         // task level < SYSTEM_LEVEL
         if (SYSTEM.level == HI) {

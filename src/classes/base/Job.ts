@@ -11,7 +11,8 @@ export class Job {
   public actualExecutionTime: number; // random number to simulate real-life behavior
   private virtualDeadline: number; // for Debuging purpose
   private _task!: Task;
-  public utilization?: number;
+  public responseTime: number = Infinity;
+  public executedAtLevel: CriticalityLevel = SYSTEM.level;
 
   constructor(id: string, arrivalTime: number, actualExecTime: number, task: Task) {
     this._task = task;
@@ -63,12 +64,7 @@ export class Job {
   }
 
   isFinished() {
-    const finished = this.remainingExecutionTime <= 0;
-    if (finished && !this.utilization) {
-      // actual utilization (although utilization is not defined for a job, but we can use this value for calculating the average statistics)
-      this.utilization = this.executedTime / this.period;
-    }
-    return finished;
+    return this.remainingExecutionTime <= 0;
   }
 
   hasMissedDeadline(time: number): boolean {
@@ -76,8 +72,12 @@ export class Job {
     else return false;
   }
 
-  execute(workDone: number) {
+  execute(workDone: number, time: number) {
     this.executedTime = Number((this.executedTime + workDone).toFixed(5));
+    if(this.remainingExecutionTime === 0) {
+      this.responseTime = Number((time - this.releaseTime).toFixed(1));
+      this.executedAtLevel = SYSTEM.level;
+    }
   }
 
   hasOverruned(): boolean {

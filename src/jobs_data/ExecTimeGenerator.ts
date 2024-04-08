@@ -19,9 +19,9 @@ export class ExecTimeGenerator {
   overrunPossibility: number; // percentage
   jobs: SavedJob[] = [];
 
-  constructor(taskSet: {id: string, tasks: Task[]}, overrunPossibility: number) {
+  constructor(taskSet: {id: string, tasks: Task[]}, overrunPossibility: number, exactOverrunTime: number) {
     this.taskSetId = taskSet.id;
-    this.overrunPossibility = overrunPossibility;
+    this.overrunPossibility = exactOverrunTime ? 0 : overrunPossibility;
     this.read();
   }
 

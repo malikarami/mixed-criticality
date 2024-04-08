@@ -13,7 +13,7 @@ export class Task {
   // extra information
   readonly phase!: number;
   private taskSetId!: string;
-  private jobs: Job[] = [];
+  jobs: Job[] = [];
 
   constructor(initiator: TaskInitiator, setId = '') {
     this.taskSetId = setId;

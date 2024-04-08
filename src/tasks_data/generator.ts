@@ -164,7 +164,7 @@ const generateTaskSet = (config: TaskSetConfig): TaskSetInitiator => {
   const data = savedData ?  parseXMLData(savedData) : undefined;
 
   if(data && data.tasks && data.id === id ){
-    console.log('DEBUG:', data.tasks);
+    // console.log('DEBUG:', data.tasks);
     console.log('task set loaded from', path);
     return convertToSimulatorTaskSetFormat(data);
   }
