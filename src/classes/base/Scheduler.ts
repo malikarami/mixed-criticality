@@ -53,7 +53,7 @@ export class Scheduler {
 
   schedulabilityCheck(speed: number) {
     return ({U11, U22, u}:{U11: number, U22: number, u: number}): boolean => {
-      if (U11 + U22 <= speed || U11 + u <= speed) return true;
+      if (U11 + U22 <= speed || (u > 0 && U11 + u <= speed)) return true;
       return false;
     };
   }

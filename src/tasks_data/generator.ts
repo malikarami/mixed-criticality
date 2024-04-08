@@ -1,6 +1,9 @@
 import {TaskSetConfig, LO, HI, CriticalityLevel, TaskSetInitiator, TaskInitiator} from "../types";
 import {readFromXMLFile, writeToXMLFile} from "../utils";
 
+const TASKS_DIRECTORY = "./src/tasks_data/out";
+
+
 interface NewTask {
   utilization: number;
   period: number;
@@ -8,12 +11,8 @@ interface NewTask {
     LO: number;
     HI: number;
   };
-  precise: {
-    c: number;
-    u: number;
-  };
-  deadline: number;
   level: CriticalityLevel;
+  id: string;
 }
 
 interface SavedTasksData {
@@ -80,13 +79,12 @@ function generateRandomTaskSet(n: number, totalUtilization: number, CF: number, 
         LO: CLO,
         HI: CHI,
       },
-      precise: { // precise value before rounding the CLO to a 0.1 precision
-        u,
-        c: u * periods[index],
-      },
-      deadline: period, // D = T
+      // precise: { // precise value before rounding the CLO to a 0.1 precision
+      //   u,
+      //   c: u * periods[index],
+      // },
       level: isHigh ? HI : LO,
-      index: index,
+      id: `${index + 1}`,
     };
   });
   return tasks;
@@ -116,8 +114,6 @@ const  generateFeasibleTaskSet = (n: number, totalUtilization: number, CF: numbe
 }
 
 
-const TASKS_DIRECTORY = "./src/tasks_data";
-
 function parseXMLData(data: Record<string, any>): SavedTasksData {
   const id = data?.id?._text;
   const tasks = data?.tasks?.map((t: Record<string, any>) => ({
@@ -127,11 +123,7 @@ function parseXMLData(data: Record<string, any>): SavedTasksData {
       LO: Number(t?.c?.LO?._text),
       HI: Number(t?.c?.HI?._text),
     },
-    precise: {
-      c: Number(t?.precise?.c?._text),
-      u: Number(t?.precise?.u?._text),
-    },
-    deadline: Number(t?.deadline?._text),
+    id: t?.id?._text,
     level: t?.level?._text,
   }))
   return {
@@ -144,10 +136,10 @@ function convertToSimulatorTaskSetFormat(data: SavedTasksData) : TaskSetInitiato
   const tasks: TaskInitiator[] = data.tasks.map((t, index) => ({
       period: t.period,
       utilization: t.utilization,
-      id: `${index + 1}`,
+      id: t.id,
       level: t.level,
       c: t.c,
-      deadline: t.deadline,
+      deadline: t.period, // T = D
     }));
   return {
     id: data.id,

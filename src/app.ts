@@ -20,10 +20,10 @@ export const Log = new Logger({
 });
 
 
-const duration = 8; // todo: read from CLI
-const overrunProbabilityPercentage = 50; // probability of actual C to be grater than C(LO)
+const duration = 80; // todo: read from CLI
+const overrunProbabilityPercentage = 0; // probability of actual C to be grater than C(LO)
 const taskSet = generateTaskSet({
-  n: 2,
+  n: 4,
   CP: 0.5,
   CF: 2,
   u: 1,
@@ -31,15 +31,15 @@ const taskSet = generateTaskSet({
 
 
 export const CONFIG: Config = {
-  exactOverrunTime: 0, // some time greater than 0, when this value is greater than 0, the overrunPossibility is ignored
+  exactOverrunTime: 50, // some integer time greater than 0, when this value is greater than 0, the overrunPossibility is ignored
   overrunWatchingMechanism: "per_clock",
   traditional: false, // traditional EDF instead of EDF-VD
   workDonePerClock: 0.1, // indicating amount of work done in each clock -> main purpose: customizing the simulation for floating point values (example: a CPU with speed less than one)
-  frequency: 10, // f clock per time unit => (f * wpc) operation done in time unit = CPU Speed
+  frequency: 5, // f clock per time unit => (f * wpc) operation done in time unit = CPU Speed
   initialSystemLevel: LO,
 };
 // read-only
 Object.freeze(CONFIG);
 
 // Change in any of the simulation inputs, result into generating new output files
-new Simulator(duration, overrunProbabilityPercentage, MCSSimpleTaskSet).run();
+new Simulator(duration, overrunProbabilityPercentage, taskSet).run();

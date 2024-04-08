@@ -20,6 +20,8 @@ export class Logger {
       feasibility: boolean;
       schedulability: boolean;
       mechanism: string;
+      case1_U11_PLUS_U22: number;
+      case2_Virtual_Deadline: number;
     } | {};
     modeChange: {
       time: number;
@@ -115,6 +117,8 @@ export class Logger {
       ...this.stats.analysis,
       feasibility: data.necessityCheck && data.taskSetFeasibilityCheck,
       schedulability: data.schedulabilityCheck,
+      case1_U11_PLUS_U22: data.U11 + data.U22,
+      case2_Virtual_Deadline: data.u,
     };
     this.stats.utilization.expected = {U11: data.U11, U21: data.U21, U22: data.U22};
     if (this.off || !this.setting.utilization) return;
@@ -272,17 +276,16 @@ export class Logger {
     );
   }
 
-  save(status: "fail" | "success") {
+  save(status: "fail" | "success", time?: number) {
     this.computeStatistics();
     const path = `${OUTPUT_DIRECTORY}/${this.taskSet.id}(${this.simulationConfig?.overrunProbabilityPercentage}%)(${this.simulationConfig.duration}).xml`;
     const log = {
       taskSet: this.taskSet.id,
       configs: {...this.simulationConfig, ...CONFIG},
-      result: status,
+      result: status + (time ? ` at ${time}` : ''),
       statistics: this.stats,
     }
     if (this.scheduler) {
-      console.log("~~~~~~~~~~~~~~~~~~~~~~~~~~SCHEDULE~~~~~~~~~~~~~~~~~~~~~~~~~~");
       // @ts-ignore
       log.schedule = Object.keys(this.scheduler.mapping)
         .sort((a, b) => Number(a) - Number(b)) // @ts-ignore
@@ -305,9 +308,9 @@ export class Logger {
       const executionInLevel = executedJobs.filter(j => j.level == j.executedAtLevel).map(j => j.executedTime).reduce((acc, curr) => acc + curr, 0) ;
       const executionOutOfLevel = executedJobs.filter(j => j.level != j.executedAtLevel).map(j => j.executedTime).reduce((acc, curr) => acc + curr, 0) ;
       const responseTimes = task.jobs.map(j => j.responseTime).sort((a, b) => Number(a) - Number(b)) // min to max
-      const min = responseTimes[0];
+      const min = responseTimes.filter(rt => rt != Infinity)[0];
       const max = responseTimes[responseTimes.length - 1];
-      const avg = responseTimes.reduce((acc, curr) => acc + curr, 0) / responseTimes.length; // @ts-ignore
+      const avg = responseTimes.filter(rt => rt != Infinity).reduce((acc, curr) => acc + curr, 0) / responseTimes.filter(rt => rt != Infinity).length; // @ts-ignore
       this.stats.responseTime[`T-${task.id}`] = {min, max, avg};
       if(task.level === LO) {
         this.stats.utilization.actual.U11 = this.stats.utilization.actual.U11 + executionInLevel / totalUnitsOfWork;

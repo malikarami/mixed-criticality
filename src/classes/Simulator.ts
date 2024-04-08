@@ -33,13 +33,14 @@ export class Simulator {
     this.taskSet = this.generateTasksSet(taskSet);
     this.scheduler = new Scheduler(this.readyQ, this.cpu);
     this.execTimeGenerator = new ExecTimeGenerator(this.taskSet, overrunProbabilityPercentage, CONFIG.exactOverrunTime);
-    Log.setUp(this.readyQ, this.scheduler, this.taskSet, {...CONFIG, overrunProbabilityPercentage, duration});
+    Log.setUp(this.readyQ, this.scheduler, this.taskSet, { overrunProbabilityPercentage, duration});
   }
 
   run() {
     this.scheduler.analyse(this.taskSet.tasks); // analyse the task set for feasibilty and determining policy
     for (this.time; this.time < this.DURATION; this.time++) {
       Logger.printDivider(this.time);
+      this.checkForceOverrun();
       this.checkJobArrivals();
       this.cpu.process(this.time, this.runTimeMonitorPerClock(this));
       this.runTimeMonitorPerTimeUnit();
@@ -85,7 +86,7 @@ export class Simulator {
   }
 
   finishHandler(status: 'fail' | 'success', jobs?: Job[], time?: number) {
-    const save = () => {     this.execTimeGenerator.save(this.DURATION); Log.save(status);}
+    const save = () => {     this.execTimeGenerator.save(this.DURATION); Log.save(status, time);}
     if(status === 'fail' && jobs && time) {
       Log.failure(time, jobs);
       save();
@@ -105,8 +106,11 @@ export class Simulator {
     let highCriticalityDeadlineMisses = this.readyQ
       .getDeadlineMisses(elapsedTime)
       .filter((j) => j.level == HI);
-    if (highCriticalityDeadlineMisses.length && !isModeChangePossible())
-      this.finishHandler('fail', highCriticalityDeadlineMisses, elapsedTime);
+    if (highCriticalityDeadlineMisses.length) {
+      // jobs has missed actual deadline in edf mode
+      // jobs has missed actual deadline in HI system
+      if(!isModeChangePossible() || highCriticalityDeadlineMisses.some(j => j.actualDeadline === j.deadline)) this.finishHandler('fail', highCriticalityDeadlineMisses, elapsedTime);
+    }
 
     // check for overruns
     if (isModeChangePossible()) {
@@ -156,11 +160,6 @@ export class Simulator {
       if (job.isFinished()) {
         simulator.jobFinishHandler(job, elapsedTime, { dispatch: true });
       }
-
-      if(CONFIG.exactOverrunTime && elapsedTime >= CONFIG.exactOverrunTime) simulator.overrunHandler([], elapsedTime, {
-        dispatch: true,
-        forceOverrun: true,
-      })
     };
   }
 
@@ -192,5 +191,12 @@ export class Simulator {
       this.scheduler.schedule();
       this.scheduler.dispatch(this.time);
     }
+  }
+
+  private checkForceOverrun() {
+    if(CONFIG.exactOverrunTime && this.time >= CONFIG.exactOverrunTime) this.overrunHandler([], this.time, {
+      dispatch: false,
+      forceOverrun: true,
+    })
   }
 }

@@ -1,7 +1,7 @@
 import {getRandomBetweenInclusive, readFromXMLFile, writeToXMLFile} from "../utils";
 import {Task} from "../classes/base/Task";
 
-const SAVED_JOBS_DIRECTORY = "./src/jobs_data";
+const SAVED_JOBS_DIRECTORY = "./src/jobs_data/out";
 
 type SavedJob = {
   id: string;
