@@ -1,5 +1,6 @@
 import {getRandomBetweenInclusive, readFromXMLFile, writeToXMLFile} from "../utils";
 import {Task} from "../classes/base/Task";
+import {HI} from "../types";
 
 const SAVED_JOBS_DIRECTORY = "./src/jobs_data/out";
 
@@ -73,10 +74,13 @@ export class ExecTimeGenerator {
     if (savedJob) return Number(savedJob.time);
     else {
       const random = Math.random();
-      const shouldOverrun = random < this.overrunPossibility / 100;
+      // just let the HI tasks to overrun
+      const shouldOverrun = task.level === HI & (random < this.overrunPossibility / 100);
       // for some task sets, CHI is zero for Lo tasks
-      const cap = task.c.HI ? task.c.HI : task.c.LO + 0.1;
+      const cap = task.c.HI ? task.c.HI : (task.c.LO + 0.1);
       const generatedActualExecTime = shouldOverrun ? getRandomBetweenInclusive(task.c.LO, cap) : getRandomBetweenInclusive(task.c.LO / 2, task.c.LO);
+      // console.log('DEBUG', {random, jobId, generatedActualExecTime, shouldOverrun})
+      if(generatedActualExecTime > cap) throw new Error('sth went wrong in job generation ')
       this.saveNewJobs({id: jobId, time: generatedActualExecTime})
       return generatedActualExecTime;
     }

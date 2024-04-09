@@ -6,7 +6,7 @@ import {HI, LO, LogLevelSettings} from "../types";
 import {writeToXMLFile} from "../utils";
 import {Task} from "./base/Task";
 
-const OUTPUT_DIRECTORY = './src/out';
+const OUTPUT_DIRECTORY = './src/result';
 
 export class Logger {
   rQ!: ReadyQueue;
@@ -176,13 +176,13 @@ export class Logger {
     if (forceOverrun) console.error("---> 🧨 FORCE OVERRUN at:", time);
     else console.error(
       "---> 🧨 jobs",
-      overrunners.map((j) => `${j.id} (reaching WCET: ${j.minimumExecutionTime} by ${j.overrun} units overrun | d: ${j.deadline})`),
+      overrunners.map((j) => `${j.id} (passing C(LO): ${j.minimumExecutionTime} by ${j.overrun} units overrun | d: ${j.deadline})`),
       byDeadlineMiss
         ? "missed high criticality deadlines at:"
         : "overran at:",
       time
     );
-    console.log("---> ❌ ~ MODE CHANGE ~ ❌");
+    console.log("---> ❌  ~ MODE CHANGE ~ ❌     ");
     if (this.rQ && this.setting.readyQ) console.log("new readyQ:", this.rQ._toString());
   }
 
@@ -218,12 +218,12 @@ export class Logger {
     if(this.off || !this.setting.failure) return;
     console.error(
       "---> 🧨 jobs",
-      jobs.map((j) => `${j.id} (reaching C(LO): ${j.minimumExecutionTime} by ${j.overrun} units overrun | d: ${j.deadline})`),
+      jobs.map((j) => `${j.id} (passing C(LO): ${j.minimumExecutionTime} by ${j.overrun} units overrun | d: ${j.deadline})`),
       "missed high criticality deadlines at:",
       time
     );
     console.log(
-      "❌❌❌❌❌❌❌❌❌❌❌❌❌❌❌❌❌❌❌❌❌❌❌❌❌❌❌❌❌❌❌❌❌❌❌❌"
+      "❌❌❌❌❌❌❌❌❌❌❌❌❌❌❌❌❌❌❌❌❌❌❌❌❌❌❌❌❌❌❌❌❌❌❌❌     "
     );
   }
 
@@ -231,11 +231,22 @@ export class Logger {
     if(this.off || !this.setting.schedule) return;
     if (this.scheduler) {
       console.log("~~~~~~~~~~~~~~~~~~~~~~~~~~SCHEDULE~~~~~~~~~~~~~~~~~~~~~~~~~~");
-      Object.keys(this.scheduler.mapping)
+      const times = Object.keys(this.scheduler.mapping);
+      // @ts-ignore
+      const modeChangeTime = this.stats.modeChange.time ? times.map(time => ([[time],  time - this.stats.modeChange?.time])).filter(i => i[1] >= 0).sort((a, b) => Number(a[1]) - Number(b[1]))[0][0]: Infinity;
+      times
         .sort((a, b) => Number(a) - Number(b))
         .forEach((time) => {
           const job = this.scheduler.mapping[time]?.id?.split("-")?.[1];
           const task = this.scheduler.mapping[time]?.id?.split("-")?.[0];
+          // @ts-ignore
+          if (time == modeChangeTime) {
+            console.log(
+              // @ts-ignore
+              Number(this.stats.modeChange.time),
+              `<-- ❌  Mode Change ❌    `
+            );
+          }
           console.log(
             Number(time),
             `<-- ${!job || !task ? "IDLE" : `T${task} (J${job})`}`
@@ -278,7 +289,7 @@ export class Logger {
 
   save(status: "fail" | "success", time?: number) {
     this.computeStatistics();
-    const path = `${OUTPUT_DIRECTORY}/${this.taskSet.id}(${this.simulationConfig?.overrunProbabilityPercentage}%)(${this.simulationConfig.duration}).xml`;
+    const path = `${OUTPUT_DIRECTORY}/${this.taskSet.id}(${this.simulationConfig?.overrunProbabilityPercentage}%)(${this.simulationConfig.duration})-${this.scheduler.policy}${CONFIG.traditional ? '-traditional' : ''}.xml`;
     const log = {
       taskSet: this.taskSet.id,
       configs: {...this.simulationConfig, ...CONFIG},

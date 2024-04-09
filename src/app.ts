@@ -6,7 +6,7 @@ import {MCSSimpleTaskSet} from "./tasks_data/samples";
 
 export const Log = new Logger({
   utilization: true,
-  arrival: true,
+  arrival: false,
   feasibilityTest: true,
   preemption: true,
   overrun: true,
@@ -16,12 +16,12 @@ export const Log = new Logger({
   failure: true,
   schedule: true,
   readyQ: true,
-  clock: true,
-});
+  clock: false,
+}, true);
 
 
-const duration = 80; // todo: read from CLI
-const overrunProbabilityPercentage = 0; // probability of actual C to be grater than C(LO)
+const duration = 100; // todo: read from CLI
+const overrunProbabilityPercentage = 100; // probability of actual C to be grater than C(LO)
 const taskSet = generateTaskSet({
   n: 4,
   CP: 0.5,
@@ -31,15 +31,15 @@ const taskSet = generateTaskSet({
 
 
 export const CONFIG: Config = {
-  exactOverrunTime: 50, // some integer time greater than 0, when this value is greater than 0, the overrunPossibility is ignored
+  exactOverrunTime: 0, // some integer time greater than 0, when this value is greater than 0, the overrunPossibility is ignored
   overrunWatchingMechanism: "per_clock",
-  traditional: false, // traditional EDF instead of EDF-VD
+  traditional: true, // traditional EDF instead of EDF-VD
   workDonePerClock: 0.1, // indicating amount of work done in each clock -> main purpose: customizing the simulation for floating point values (example: a CPU with speed less than one)
-  frequency: 5, // f clock per time unit => (f * wpc) operation done in time unit = CPU Speed
+  frequency: 20, // f clock per time unit => (f * wpc) operation done in time unit = CPU Speed
   initialSystemLevel: LO,
 };
 // read-only
 Object.freeze(CONFIG);
 
-// Change in any of the simulation inputs, result into generating new output files
+// Change in any of the simulation inputs, result into generating new taskset and jobset output files
 new Simulator(duration, overrunProbabilityPercentage, taskSet).run();

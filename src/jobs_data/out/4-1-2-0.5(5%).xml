@@ -1,0 +1,36 @@
+<root>
+    <overrunPossibility>5</overrunPossibility>
+    <duration>5</duration>
+    <jobs>
+        <id>1-0</id>
+        <time>0.4</time>
+    </jobs>
+    <jobs>
+        <id>2-0</id>
+        <time>4.8</time>
+    </jobs>
+    <jobs>
+        <id>3-0</id>
+        <time>7.3</time>
+    </jobs>
+    <jobs>
+        <id>4-0</id>
+        <time>0.5</time>
+    </jobs>
+    <jobs>
+        <id>1-1</id>
+        <time>0.5</time>
+    </jobs>
+    <jobs>
+        <id>1-2</id>
+        <time>0.5</time>
+    </jobs>
+    <jobs>
+        <id>1-3</id>
+        <time>0.3</time>
+    </jobs>
+    <jobs>
+        <id>1-4</id>
+        <time>0.4</time>
+    </jobs>
+</root>

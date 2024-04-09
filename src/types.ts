@@ -10,7 +10,7 @@ export type ExecutionTime = {
   HI: number;
 };
 
-export type TaskInitiator = Pick<Task, 'period' | 'utilization' | 'c' | 'id' | 'deadline' | 'level'> & {phase?: number};
+export type TaskInitiator = Pick<Task, 'period' | 'c' | 'id' | 'deadline' | 'level'> & {phase?: number};
 
 export type TaskSetInitiator = {
   tasks: TaskInitiator[];

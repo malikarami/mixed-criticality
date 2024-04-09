@@ -1,11 +1,14 @@
-import {TaskSetConfig, LO, HI, CriticalityLevel, TaskSetInitiator, TaskInitiator} from "../types";
-import {readFromXMLFile, writeToXMLFile} from "../utils";
+import {CriticalityLevel, HI, LO, TaskInitiator, TaskSetConfig, TaskSetInitiator} from "../types";
+import {getRandomIntegersInInterval, readFromXMLFile, writeToXMLFile} from "../utils";
 
 const TASKS_DIRECTORY = "./src/tasks_data/out";
 
 
 interface NewTask {
-  utilization: number;
+  utilization: {
+    LO: number;
+    HI: number;
+  }
   period: number;
   c: {
     LO: number;
@@ -43,18 +46,6 @@ function logUniform(min: number, max: number, n: number): number[] {
   return periods;
 }
 
-// find n unique numbers in [min, max]
-function getRandomIntegers(n: number, min: number, max: number): number[] {
-  const randomIntegers = new Set();
-
-  while (randomIntegers.size < n) {
-    const randomInteger = Math.floor(Math.random() * (max - min + 1)) + min;
-    randomIntegers.add(randomInteger);
-  }
-
-  return Array.from(randomIntegers) as unknown as number[];
-}
-
 
 // generate a CHI that is smaller than the period
 function generateFeasibleWCET(CLO:number, CF: number, D: number): number {
@@ -73,8 +64,11 @@ function generateRandomTaskSet(n: number, totalUtilization: number, CF: number, 
     const CHI = generateFeasibleWCET(CLO, CF, period);
     const isHigh = highTasksIndexes.includes(index);
     return {
-      utilization: CLO / period, // D = T
-      period,
+      utilization: {
+        LO: CLO / period,
+        HI: CHI / period,
+      },
+      period, // D = T
       c: {
         LO: CLO,
         HI: CHI,
@@ -90,9 +84,9 @@ function generateRandomTaskSet(n: number, totalUtilization: number, CF: number, 
   return tasks;
 }
 
-const getTotalUtilization = (set: NewTask[]): number => {
+const getTotalUtilization = (set: NewTask[], level: CriticalityLevel): number => {
   return set.reduce((previousValue: number, currentValue) => {
-    return currentValue.utilization + previousValue;
+    return currentValue.utilization[level] + previousValue;
   }, 0);
 }
 
@@ -109,7 +103,7 @@ const  generateFeasibleTaskSet = (n: number, totalUtilization: number, CF: numbe
 
   if(set.some(task => !task.c.LO || !task.c.HI || task.c.LO > task.period || task.c.HI > task.period)) throw new Error(`Not able to generate a feasible task set after ${MAX_ITERATIONS} tries`);
 
-  console.log('DEBUG: Found a feasible task set after', iteration, 'tries with actual utilization of:', getTotalUtilization(set), 'instead of:', totalUtilization);
+  console.log('DEBUG: Found a feasible task set after', iteration, 'tries with actual utilization of:', getTotalUtilization(set, HI) , '|', getTotalUtilization(set, LO), 'instead of:', totalUtilization);
   return set;
 }
 
@@ -117,7 +111,10 @@ const  generateFeasibleTaskSet = (n: number, totalUtilization: number, CF: numbe
 function parseXMLData(data: Record<string, any>): SavedTasksData {
   const id = data?.id?._text;
   const tasks = data?.tasks?.map((t: Record<string, any>) => ({
-    utilization: Number(t?.utilization?._text),
+    utilization: {
+      LO: Number(t?.utilization?.LO._text),
+      HI: Number(t?.utilization?.HI._text),
+    },
     period: Number(t?.period?._text),
     c: {
       LO: Number(t?.c?.LO?._text),
@@ -135,7 +132,6 @@ function parseXMLData(data: Record<string, any>): SavedTasksData {
 function convertToSimulatorTaskSetFormat(data: SavedTasksData) : TaskSetInitiator {
   const tasks: TaskInitiator[] = data.tasks.map((t, index) => ({
       period: t.period,
-      utilization: t.utilization,
       id: t.id,
       level: t.level,
       c: t.c,
@@ -161,7 +157,7 @@ const generateTaskSet = (config: TaskSetConfig): TaskSetInitiator => {
     return convertToSimulatorTaskSetFormat(data);
   }
   else {
-    const highTasksIndexes = getRandomIntegers(Math.floor(n * CP), 0, n - 1);
+    const highTasksIndexes = getRandomIntegersInInterval(Math.floor(n * CP), 0, n - 1);
     // console.log('DEBUG:', highTasksIndexes);
     const tasks = generateFeasibleTaskSet(n, u, CF, highTasksIndexes);
     writeToXMLFile<SavedTasksData>(path, {tasks, id});

@@ -5,7 +5,6 @@ import {ExecTimeGenerator} from "../../jobs_data/ExecTimeGenerator";
 export class Task {
   // mandatory initiatives
   readonly period!: number;
-  readonly utilization!: number;
   readonly id!: string;
   readonly level!: CriticalityLevel;
   readonly c!: ExecutionTime;
@@ -29,7 +28,8 @@ export class Task {
   generateJob(time: number, execTimeGenerator: ExecTimeGenerator) {
     if (time % this.period == this.phase) {
       const id = this.id + "-" + this.jobs.length;
-      const actualExecTime = execTimeGenerator.generate(id, this)
+      const actualExecTime = execTimeGenerator.generate(id, this);
+      if (actualExecTime > this.c.HI) throw new Error('sth went wrong in job generation ')
       const j = new Job(id, time, actualExecTime, this);
       this.jobs.push(j);
       return j;

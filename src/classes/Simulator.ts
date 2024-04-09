@@ -164,6 +164,8 @@ export class Simulator {
   }
 
   checkJobArrivals() {
+    // this.taskSet.tasks.forEach(t => {console.log(t); t.jobs.forEach(j => console.log(j))})
+
     let anyJobArrived = false;
     this.taskSet.tasks.forEach((task) => {
       // condition for generating jobs is checked inside each task

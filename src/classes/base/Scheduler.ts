@@ -8,7 +8,7 @@ import {Utilization} from "./utilization";
 import {Log, CONFIG} from "../../app";
 
 export class Scheduler {
-  private policy: SchedulingPolicy = "edf";
+  policy: SchedulingPolicy = "edf";
   private readyQ!: ReadyQueue;
   private cpu!: CPU;
   mapping: Record<string, Job> = {};
@@ -67,11 +67,8 @@ export class Scheduler {
     const U22 = Utilization(tasks)(HI, HI); // utilization of tasks of level HI in a HI system
     const u = U21 / (speed - U22);
 
-    // the task set itself must be feasible
     const taskSetFeasibilityCheck = !tasks.some(t => t.c.LO > t.period || t.c.HI > t.period);
-    // necessary analysis for schedulablity
     const necessityCheck = this.necessityCheck(speed)({U11, U21, U22});
-    // no need for feasibility check when the tas kset can not pass the necessity check, but we do it nonetheless
     const schedulabilityCheck = this.schedulabilityCheck(speed)({U11, U22, u});
 
     Log.utilization({speed, U11, U12, U21, U22, u, taskSetFeasibilityCheck, necessityCheck, schedulabilityCheck});

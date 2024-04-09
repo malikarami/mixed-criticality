@@ -50,3 +50,15 @@ export function getRandomBetweenInclusive(min: number, max: number) {
 export function isModeChangePossible(): boolean {
   return !CONFIG.traditional && SYSTEM.level == LO;
 }
+
+// find n unique numbers in [min, max]
+export function getRandomIntegersInInterval(n: number, min: number, max: number): number[] {
+  const randomIntegers = new Set();
+
+  while (randomIntegers.size < n) {
+    const randomInteger = Math.floor(Math.random() * (max - min + 1)) + min;
+    randomIntegers.add(randomInteger);
+  }
+
+  return Array.from(randomIntegers) as unknown as number[];
+}

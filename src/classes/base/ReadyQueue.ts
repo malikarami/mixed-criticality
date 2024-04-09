@@ -1,5 +1,6 @@
 import {Job} from "./Job";
 import {LO} from "../../types";
+import {SYSTEM} from "../System";
 
 export class ReadyQueue {
   private jobs: Job[] = [];
@@ -43,7 +44,7 @@ export class ReadyQueue {
       ? []
       : this.jobs.map(
         (j) =>
-          `[id: ${j.id}, deadline: ${j.deadline}, actualDeadline: ${j.actualDeadline}, level: ${j.level}, executed: ${j.executedTime}, releasedAt: ${j.releaseTime}, actualC: ${j.actualExecutionTime}, WCET: ${j.expectedExecutionTime}, T: ${j.period}]`
+          `[id: ${j.id}, deadline: ${j.deadline}, actualDeadline: ${j.actualDeadline}, level: ${j.level}, executed: ${j.executedTime}, releasedAt: ${j.releaseTime}, actualC: ${j.actualExecutionTime}, WCET(${SYSTEM.level}): ${j.expectedExecutionTime}, T: ${j.period}]`
       );
   }
 }

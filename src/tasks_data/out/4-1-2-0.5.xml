@@ -1,40 +1,52 @@
 <root>
     <tasks>
-        <utilization>0.15</utilization>
-        <period>8</period>
+        <utilization>
+            <LO>0.5</LO>
+            <HI>1</HI>
+        </utilization>
+        <period>1</period>
         <c>
-            <LO>1.2</LO>
-            <HI>2.4</HI>
+            <LO>0.5</LO>
+            <HI>1</HI>
         </c>
-        <level>HI</level>
+        <level>LO</level>
         <id>1</id>
     </tasks>
     <tasks>
-        <utilization>0.38571428571428573</utilization>
-        <period>7</period>
+        <utilization>
+            <LO>0.0878048780487805</LO>
+            <HI>0.175609756097561</HI>
+        </utilization>
+        <period>82</period>
         <c>
-            <LO>2.7</LO>
-            <HI>5.4</HI>
+            <LO>7.2</LO>
+            <HI>14.4</HI>
         </c>
         <level>LO</level>
         <id>2</id>
     </tasks>
     <tasks>
-        <utilization>0.03</utilization>
-        <period>10</period>
+        <utilization>
+            <LO>0.19322033898305085</LO>
+            <HI>0.3864406779661017</HI>
+        </utilization>
+        <period>59</period>
         <c>
-            <LO>0.3</LO>
-            <HI>0.6</HI>
+            <LO>11.4</LO>
+            <HI>22.8</HI>
         </c>
-        <level>LO</level>
+        <level>HI</level>
         <id>3</id>
     </tasks>
     <tasks>
-        <utilization>0.19375</utilization>
-        <period>48</period>
+        <utilization>
+            <LO>0.1</LO>
+            <HI>0.2</HI>
+        </utilization>
+        <period>5</period>
         <c>
-            <LO>9.3</LO>
-            <HI>18.6</HI>
+            <LO>0.5</LO>
+            <HI>1</HI>
         </c>
         <level>HI</level>
         <id>4</id>
