@@ -75,7 +75,7 @@ export class ExecTimeGenerator {
     else {
       const random = Math.random();
       // just let the HI tasks to overrun
-      const shouldOverrun = task.level === HI & (random < this.overrunPossibility / 100);
+      const shouldOverrun = task.level === HI && (random < this.overrunPossibility / 100);
       // for some task sets, CHI is zero for Lo tasks
       const cap = task.c.HI ? task.c.HI : (task.c.LO + 0.1);
       const generatedActualExecTime = shouldOverrun ? getRandomBetweenInclusive(task.c.LO, cap) : getRandomBetweenInclusive(task.c.LO / 2, task.c.LO);

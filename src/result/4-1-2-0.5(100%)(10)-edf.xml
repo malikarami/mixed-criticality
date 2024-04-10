@@ -3,7 +3,7 @@
     <configs>
         <overrunProbabilityPercentage>100</overrunProbabilityPercentage>
         <duration>10</duration>
-        <exactOverrunTime>0</exactOverrunTime>
+        <exactOverrunTime>1</exactOverrunTime>
         <overrunWatchingMechanism>per_clock</overrunWatchingMechanism>
         <traditional>false</traditional>
         <workDonePerClock>0.1</workDonePerClock>
@@ -20,14 +20,14 @@
             <mechanism>edf</mechanism>
         </analysis>
         <modeChange>
-            <time>0.25</time>
-            <reason>overrun</reason>
+            <time>1</time>
+            <reason>forced</reason>
         </modeChange>
         <preemptions>
             <LObyLO>0</LObyLO>
-            <LObyHI>1</LObyHI>
+            <LObyHI>0</LObyHI>
             <HIbyLO>0</HIbyLO>
-            <HIbyHI>1</HIbyHI>
+            <HIbyHI>0</HIbyHI>
         </preemptions>
         <deadlineMisses>
             <HI>0</HI>
@@ -40,7 +40,7 @@
         </totalJobs>
         <finishedJobs>
             <HI>3</HI>
-            <LO>0</LO>
+            <LO>1</LO>
         </finishedJobs>
         <utilization>
             <expected>
@@ -49,18 +49,18 @@
                 <U22>0.5864406779661018</U22>
             </expected>
             <actual>
-                <U11>0.025</U11>
+                <U11>0.015</U11>
                 <U12>0</U12>
-                <U21>0</U21>
-                <U22>0.8</U22>
+                <U21>0.015</U21>
+                <U22>0.48</U22>
             </actual>
             <totalUnitsOfWork>20</totalUnitsOfWork>
         </utilization>
         <responseTime>
             <T-1>
-                <min/>
+                <min>0.2</min>
                 <max>Infinity</max>
-                <avg>NaN</avg>
+                <avg>0.2</avg>
             </T-1>
             <T-2>
                 <min/>
@@ -68,23 +68,23 @@
                 <avg>NaN</avg>
             </T-2>
             <T-3>
-                <min>8.3</min>
-                <max>8.3</max>
-                <avg>8.3</avg>
+                <min>4.8</min>
+                <max>4.8</max>
+                <avg>4.8</avg>
             </T-3>
             <T-4>
-                <min>0.5</min>
-                <max>0.7</max>
-                <avg>0.6</avg>
+                <min>0.3</min>
+                <max>0.3</max>
+                <avg>0.3</avg>
             </T-4>
         </responseTime>
     </statistics>
     <schedule>
         <t-0>T1 (J0)</t-0>
-        <t-0.25>T4 (J0)</t-0.25>
-        <t-0.65>T3 (J0)</t-0.65>
+        <t-0.15>T4 (J0)</t-0.15>
+        <t-0.3>T3 (J0)</t-0.3>
+        <t-4.85>IDLE</t-4.85>
         <t-5>T4 (J1)</t-5>
-        <t-5.45>T3 (J0)</t-5.45>
-        <t-8.25>IDLE</t-8.25>
+        <t-5.25>IDLE</t-5.25>
     </schedule>
 </root>
