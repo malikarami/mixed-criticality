@@ -17,8 +17,9 @@ export class Logger {
   off: boolean = false;
   stats: {
     analysis: {
-      feasibility: boolean;
-      schedulability: boolean;
+      taskSetCheck: boolean;
+      necessaryCheck: boolean;
+      sufficientCheck: boolean;
       mechanism: string;
       case1_U11_PLUS_U22: number;
       case2_Virtual_Deadline: number;
@@ -112,11 +113,12 @@ export class Logger {
     this.simulationConfig = c;
   }
 
-  utilization(data: { speed: number, U11: number; U22: number; U21: number; u: number; U12: number, necessityCheck: boolean, schedulabilityCheck: boolean, taskSetFeasibilityCheck: boolean }) {
+  utilization(data: { speed: number, U11: number; U22: number; U21: number; u: number; U12: number, necessaryCheck: boolean, sufficientCheck: boolean, taskSetCheck: boolean }) {
     this.stats.analysis = {
       ...this.stats.analysis,
-      feasibility: data.necessityCheck && data.taskSetFeasibilityCheck,
-      schedulability: data.schedulabilityCheck,
+      taskSetCheck: data.taskSetCheck,
+      necessaryCheck: data.necessaryCheck,
+      sufficientCheck: data.sufficientCheck,
       case1_U11_PLUS_U22: data.U11 + data.U22,
       case2_Virtual_Deadline: data.u,
     };
@@ -146,9 +148,6 @@ export class Logger {
     console.log(
       "Strategy:",
       CONFIG.traditional ? "traditional-edf" : policy,
-      "With",
-      `"${CONFIG.overrunWatchingMechanism}"`,
-      "as overrun watching mechanism",
     );
     console.log("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
   }

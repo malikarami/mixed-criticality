@@ -46,13 +46,29 @@ export class Scheduler {
 
   necessityCheck(speed: number) {
     return ({U11, U21, U22}: {U11: number, U21: number, U22: number}): boolean => {
-      if (U11 + U21 <= speed && U22 <= speed) return true;
+      if (CONFIG.traditional) {
+        if (SYSTEM.level === HI) {
+          return U22 <= speed;
+        }
+        if (SYSTEM.level === LO) {
+          return (U21 + U11) <= speed;
+        }
+      }
+      else if (U11 + U21 <= speed && U22 <= speed) return true;
       return false;
     };
   }
 
-  schedulabilityCheck(speed: number) {
-    return ({U11, U22, u}:{U11: number, U22: number, u: number}): boolean => {
+  sufficiencyCheck(speed: number) {
+    return ({U11, U22, U21, u}:{U11: number, U22: number, U21: number, u: number}): boolean => {
+      if (CONFIG.traditional) {
+        if (SYSTEM.level === HI) {
+          return U21 <= speed;
+        }
+        if (SYSTEM.level === LO) {
+          return (U21 + U11) <= speed;
+        }
+      }
       if (U11 + U22 <= speed || (u > 0 && U11 + u <= speed)) return true;
       return false;
     };
@@ -67,13 +83,13 @@ export class Scheduler {
     const U22 = Utilization(tasks)(HI, HI); // utilization of tasks of level HI in a HI system
     const u = U21 / (speed - U22);
 
-    const taskSetFeasibilityCheck = !tasks.some(t => t.c.LO > t.period || t.c.HI > t.period);
-    const necessityCheck = this.necessityCheck(speed)({U11, U21, U22});
-    const schedulabilityCheck = this.schedulabilityCheck(speed)({U11, U22, u});
+    const taskSetCheck = !tasks.some(t => t.c.LO > t.period || t.c.HI > t.period);
+    const necessaryCheck = this.necessityCheck(speed)({U11, U21, U22});
+    const sufficientCheck = this.sufficiencyCheck(speed)({U11, U22, U21, u});
 
-    Log.utilization({speed, U11, U12, U21, U22, u, taskSetFeasibilityCheck, necessityCheck, schedulabilityCheck});
+    Log.utilization({speed, U11, U12, U21, U22, u, taskSetCheck, necessaryCheck, sufficientCheck});
 
-    const isFeasible = taskSetFeasibilityCheck &&  necessityCheck && schedulabilityCheck;
+    let isFeasible = taskSetCheck &&  necessaryCheck && sufficientCheck;
 
     if (CONFIG.traditional || U11 + U22 <= speed) {
       this.policy = "edf";

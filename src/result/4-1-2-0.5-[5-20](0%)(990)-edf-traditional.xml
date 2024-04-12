@@ -13,8 +13,9 @@
     <result>success</result>
     <statistics>
         <analysis>
-            <feasibility>false</feasibility>
-            <schedulability>false</schedulability>
+            <taskSetCheck>true</taskSetCheck>
+            <necessaryCheck>true</necessaryCheck>
+            <sufficientCheck>true</sufficientCheck>
             <case1_U11_PLUS_U22>1.39010101010101</case1_U11_PLUS_U22>
             <case2_Virtual_Deadline>-3.462962962962964</case2_Virtual_Deadline>
             <mechanism>edf</mechanism>
