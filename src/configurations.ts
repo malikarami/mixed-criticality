@@ -5,18 +5,21 @@ type Configurations = {
   overrunProbabilityPercentage: number;
   scheduling: Config,
   tasks: TaskSetConfig,
-  log: LogLevelSettings,
+  log: {
+    enabled: boolean;
+    setting: LogLevelSettings;
+  },
 }
 
 const configurations : Configurations=  {
-  duration: 0, // duration for which the simulation would run
-  overrunProbabilityPercentage: 50,  // probability of actual C to be grater than C(LO)
+  duration: 990, // duration for which the simulation would run
+  overrunProbabilityPercentage: 0,  // probability of actual C to be grater than C(LO)
   scheduling: {
     exactOverrunTime: 0, // some integer time greater than 0, when this value is greater than 0, the overrunPossibility is ignored
     overrunWatchingMechanism: "per_clock", // deprecated -> ignore
-    traditional: false, // traditional EDF instead of EDF-VD
+    traditional: true, // traditional EDF instead of EDF-VD
     workDonePerClock: 0.1, // indicating amount of work done in each clock -> main purpose: customizing the simulation for floating point values (example: a CPU with speed less than one)
-    frequency: 20, // f clock per time unit => (f * wpc) operation done in time unit = CPU Speed
+    frequency: 10, // f clock per time unit => (f * wpc) operation done in time unit = CPU Speed
     initialSystemLevel: LO,
   },
   tasks: {
@@ -28,18 +31,21 @@ const configurations : Configurations=  {
     maxPeriod: 20,
   },
   log: {
-    utilization: true,
-    arrival: true,
-    feasibilityTest: true,
-    preemption: true,
-    overrun: true,
-    jobFinish: true,
-    deadlineMiss: true,
-    dispatch: true,
-    failure: true,
-    schedule: true,
-    readyQ: true,
-    clock: true,
+    enabled: true,
+    setting: {
+      utilization: true,
+      arrival: true,
+      feasibilityTest: true,
+      preemption: true,
+      overrun: true,
+      jobFinish: true,
+      deadlineMiss: true,
+      dispatch: true,
+      failure: true,
+      schedule: true,
+      readyQ: true,
+      clock: true,
+    }
   }
 }
 

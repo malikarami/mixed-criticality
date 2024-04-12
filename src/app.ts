@@ -8,7 +8,7 @@ import validate from "./validate";
 // validates configuration inputs
 validate();
 
-export const Log = new Logger(configurations.log, true);
+export const Log = new Logger(configurations.log.setting, configurations.log.enabled);
 
 const taskSet = generateTaskSet(configurations.tasks);
 

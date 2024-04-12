@@ -18,7 +18,7 @@ function checkTasks(tasks: TaskSetConfig) {
 
 function checkSimulationSettings(duration: number, overrunProbabilityPercentage: number) {
   if(!(Number.isInteger(duration) && duration >= 0)) error('duration');
-  if(!(overrunProbabilityPercentage && overrunProbabilityPercentage >= 0 && overrunProbabilityPercentage <= 100)) error('overrunProbabilityPercentage');
+  if(!(overrunProbabilityPercentage >= 0 && overrunProbabilityPercentage <= 100)) error('overrunProbabilityPercentage');
 }
 
 function checkSchedulingSettings(scheduling: Config) {
