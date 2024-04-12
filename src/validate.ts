@@ -2,17 +2,18 @@ import configurations from "./configurations";
 import {Config, HI, LO, TaskSetConfig} from "./types";
 
 const error = (message: string) => {
-  throw new Error(`'Some of the configuration values are illegal: ${message}. Check your inputs in configurations.ts and try again!`);
+  const e = `Some of the configuration values are illegal: ${message}. Check your inputs in configurations.ts and try again!`;
+  throw new Error(e);
 }
 
 function checkTasks(tasks: TaskSetConfig) {
-  const {n, CP, CF, u, minPriority, maxPriority} = tasks;
+  const {n, CP, CF, u, minPeriod, maxPeriod} = tasks;
   if(!(n && Number.isInteger(n))) error('tasks.n');
   if(!(CP && CP > 0 && CP < 1)) error('tasks.CP');
   if(!(CF && CF > 1)) error('tasks.CF');
   if(!(u && u > 0)) error('tasks.u');
-  if( minPriority && !Number.isInteger(minPriority))  error('tasks.minPriority');
-  if(maxPriority && !Number.isInteger(maxPriority)) error('tasks.maxPriority');
+  if( minPeriod && !Number.isInteger(minPeriod))  error('tasks.minPeriod');
+  if( maxPeriod&& !Number.isInteger(maxPeriod)) error('tasks.maxPeriod');
 }
 
 function checkSimulationSettings(duration: number, overrunProbabilityPercentage: number) {
