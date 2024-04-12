@@ -9,7 +9,7 @@ export const Log = new Logger(configurations.log, true);
 const taskSet = generateTaskSet(configurations.tasks);
 
 // read-only
-export const CONFIG: Config = configurations.simulation;
+export const CONFIG: Config = configurations.scheduling;
 Object.freeze(CONFIG);
 
 // Change in any of the simulation inputs, result into generating new taskset and jobset output files

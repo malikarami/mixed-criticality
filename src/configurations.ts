@@ -3,7 +3,7 @@ import {Config, LO, LogLevelSettings, TaskSetConfig} from "./types";
 type Configurations = {
   duration: number;
   overrunProbabilityPercentage: number;
-  simulation: Config,
+  scheduling: Config,
   tasks: TaskSetConfig,
   log: LogLevelSettings,
 }
@@ -11,7 +11,7 @@ type Configurations = {
 const configurations : Configurations=  {
   duration: 40, // duration for which the simulation would run
   overrunProbabilityPercentage: 50,  // probability of actual C to be grater than C(LO)
-  simulation: {
+  scheduling: {
     exactOverrunTime: 1, // some integer time greater than 0, when this value is greater than 0, the overrunPossibility is ignored
     overrunWatchingMechanism: "per_clock", // deprecated -> ignore
     traditional: false, // traditional EDF instead of EDF-VD
