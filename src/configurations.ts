@@ -21,9 +21,9 @@ const configurations : Configurations=  {
   },
   tasks: {
     n: 4, // number of tasks
-    CP: 0.5, // total system utilization
-    CF: 2,  // criticality proportion
-    u: 1, // criticality factor, > 1
+    u: 1, // total system utilization
+    CF: 1.5, // criticality factor, > 1
+    CP: 2, // criticality proportion, < 1
     minPeriod: 1,
     maxPeriod: 100,
   },

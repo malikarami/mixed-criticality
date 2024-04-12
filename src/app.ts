@@ -3,6 +3,10 @@ import {Config} from "./types";
 import {Logger} from "./classes/Logger";
 import generateTaskSet from "./tasks_data/generator";
 import configurations from './configurations';
+import validate from "./validate";
+
+// validates configuration inputs
+validate();
 
 export const Log = new Logger(configurations.log, true);
 
