@@ -39,12 +39,12 @@ export class Simulator {
   run() {
     this.scheduler.analyse(this.taskSet.tasks); // analyse the task set for feasibilty and determining policy
     for (this.time; this.time < this.DURATION; this.time++) {
-      Logger.printDivider(this.time);
+      Log.printDivider(this.time);
       this.checkForceOverrun();
       this.checkJobArrivals();
       this.cpu.process(this.time, this.runTimeMonitorPerClock(this));
       this.runTimeMonitorPerTimeUnit();
-      Logger.printDivider();
+      Log.printDivider();
     }
     this.finishHandler('success');
   }

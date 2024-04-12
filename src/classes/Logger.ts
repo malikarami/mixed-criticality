@@ -243,7 +243,7 @@ export class Logger {
           if (time == modeChangeTime) {
             console.log(
               // @ts-ignore
-              Number(this.stats.modeChange.time),
+              Number(this.stats.modeChange?.time),
               `<-- ❌  Mode Change ❌    `
             );
           }
@@ -260,7 +260,8 @@ export class Logger {
     console.log(rQ._toString());
   }
 
-  static printDivider(time?: number) {
+  printDivider(time?: number) {
+    if(this.off ||  !this.setting.time) return;
     if (time !== undefined) {
       console.log(
         "****************************",

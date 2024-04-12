@@ -31,8 +31,9 @@ const configurations : Configurations=  {
     maxPeriod: 20,
   },
   log: {
-    enabled: true,
+    enabled: false,
     setting: {
+      time: true,
       utilization: true,
       arrival: true,
       feasibilityTest: true,
@@ -44,7 +45,7 @@ const configurations : Configurations=  {
       failure: true,
       schedule: true,
       readyQ: true,
-      clock: true,
+      clock: false,
     }
   }
 }

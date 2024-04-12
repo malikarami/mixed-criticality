@@ -28,6 +28,7 @@ export type Config = {
 };
 
 export type LogLevelSettings = {
+  time: boolean;
   utilization: boolean;
   arrival: boolean;
   feasibilityTest: boolean;
