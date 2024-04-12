@@ -13,7 +13,7 @@ const configurations : Configurations=  {
   overrunProbabilityPercentage: 50,  // probability of actual C to be grater than C(LO)
   simulation: {
     exactOverrunTime: 1, // some integer time greater than 0, when this value is greater than 0, the overrunPossibility is ignored
-    overrunWatchingMechanism: "per_clock",
+    overrunWatchingMechanism: "per_clock", // deprecated -> ignore
     traditional: false, // traditional EDF instead of EDF-VD
     workDonePerClock: 0.1, // indicating amount of work done in each clock -> main purpose: customizing the simulation for floating point values (example: a CPU with speed less than one)
     frequency: 20, // f clock per time unit => (f * wpc) operation done in time unit = CPU Speed
