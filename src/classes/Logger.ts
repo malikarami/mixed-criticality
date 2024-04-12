@@ -2,7 +2,7 @@ import {Job} from "./base/Job";
 import {ReadyQueue} from "./base/ReadyQueue";
 import {Scheduler} from "./base/Scheduler";
 import {CONFIG} from "../app";
-import {HI, LO, LogLevelSettings} from "../types";
+import { HI, LO, LogLevelSettings, SimulationConfig} from "../types";
 import {writeToXMLFile} from "../utils";
 import {Task} from "./base/Task";
 
@@ -13,7 +13,7 @@ export class Logger {
   scheduler!: Scheduler;
   taskSet!: { id: string; tasks: Task[]};
   setting!: LogLevelSettings;
-  simulationConfig!: { duration: number; overrunProbabilityPercentage: number; }
+  simulationConfig!: SimulationConfig;
   off: boolean = false;
   stats: {
     analysis: {
@@ -106,7 +106,7 @@ export class Logger {
     };
   }
 
-  setUp(rQ: ReadyQueue, scheduler: Scheduler, ts: { id: string; tasks: Task[]}, c: { duration: number; overrunProbabilityPercentage: number; } ) {
+  setUp(rQ: ReadyQueue, scheduler: Scheduler, ts: { id: string; tasks: Task[]}, c: SimulationConfig ) {
     this.rQ = rQ;
     this.scheduler = scheduler;
     this.taskSet = ts;
@@ -289,7 +289,11 @@ export class Logger {
 
   save(status: "fail" | "success", time?: number) {
     this.computeStatistics();
-    const path = `${OUTPUT_DIRECTORY}/${this.taskSet.id}(${this.simulationConfig?.overrunProbabilityPercentage}%)(${this.simulationConfig.duration})-${this.scheduler.policy}${CONFIG.traditional ? '-traditional' : ''}.xml`;
+    const actualC = this.simulationConfig.ExecTimeGeneratorMode === 'random' ? 'random' + this.simulationConfig?.overrunProbabilityPercentage + '%' : this.simulationConfig.ExecTimeGeneratorMode;
+    const setId = this.taskSet.id;
+    const d = this.simulationConfig.duration;
+    const policy = this.scheduler.policy + (CONFIG.traditional ? '-traditional' : '');
+    const path = `${OUTPUT_DIRECTORY}/(${setId})-(${actualC})-(${d})-(${policy}).xml`;
     const log = {
       taskSet: this.taskSet.id,
       configs: {...this.simulationConfig, ...CONFIG},

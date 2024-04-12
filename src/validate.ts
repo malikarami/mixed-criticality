@@ -1,5 +1,5 @@
 import configurations from "./configurations";
-import {Config, HI, LO, TaskSetConfig} from "./types";
+import {Config, HI, LO, SimulationConfig, TaskSetConfig} from "./types";
 
 const error = (message: string) => {
   const e = `Some of the configuration values are illegal: ${message}. Check your inputs in configurations.ts and try again!`;
@@ -16,7 +16,8 @@ function checkTasks(tasks: TaskSetConfig) {
   if( maxPeriod&& !Number.isInteger(maxPeriod)) error('tasks.maxPeriod');
 }
 
-function checkSimulationSettings(duration: number, overrunProbabilityPercentage: number) {
+function checkSimulationSettings(config: SimulationConfig) {
+  const {duration, overrunProbabilityPercentage} = config;
   if(!(Number.isInteger(duration) && duration >= 0)) error('duration');
   if(!(overrunProbabilityPercentage >= 0 && overrunProbabilityPercentage <= 100)) error('overrunProbabilityPercentage');
 }
@@ -32,7 +33,7 @@ function checkSchedulingSettings(scheduling: Config) {
 
 const validate = () => {
   checkTasks(configurations.tasks);
-  checkSimulationSettings(configurations.duration, configurations.overrunProbabilityPercentage);
+  checkSimulationSettings(configurations.simulation);
   checkSchedulingSettings(configurations.scheduling);
 };
 

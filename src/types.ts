@@ -51,3 +51,10 @@ export type TaskSetConfig = {
   minPeriod?: number;
   maxPeriod?: number;
 }
+
+
+export type  ExecTimeGeneratorModes = 'HI' | 'LO' | 'random' | 'level';
+export type SimulationConfig = {
+  duration: number, overrunProbabilityPercentage: number, ExecTimeGeneratorMode: ExecTimeGeneratorModes
+}
+

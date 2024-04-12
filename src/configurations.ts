@@ -1,8 +1,7 @@
-import {Config, LO, LogLevelSettings, TaskSetConfig} from "./types";
+import {Config, ExecTimeGeneratorModes, LO, LogLevelSettings, SimulationConfig, TaskSetConfig} from "./types";
 
 type Configurations = {
-  duration: number;
-  overrunProbabilityPercentage: number;
+  simulation: SimulationConfig,
   scheduling: Config,
   tasks: TaskSetConfig,
   log: {
@@ -12,8 +11,11 @@ type Configurations = {
 }
 
 const configurations : Configurations=  {
-  duration: 990, // duration for which the simulation would run
-  overrunProbabilityPercentage: 0,  // probability of actual C to be grater than C(LO)
+  simulation: {
+    duration: 990, // duration for which the simulation would run
+    overrunProbabilityPercentage: 0,  // probability of actual C to be grater than C(LO)
+    ExecTimeGeneratorMode: 'random',
+  },
   scheduling: {
     exactOverrunTime: 0, // some integer time greater than 0, when this value is greater than 0, the overrunPossibility is ignored
     overrunWatchingMechanism: "per_clock", // deprecated -> ignore

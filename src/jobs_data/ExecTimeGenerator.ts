@@ -1,6 +1,7 @@
 import {getRandomBetweenInclusive, readFromXMLFile, writeToXMLFile} from "../utils";
 import {Task} from "../classes/base/Task";
-import {HI} from "../types";
+import {ExecTimeGeneratorModes, HI, SimulationConfig} from "../types";
+import configurations from "../configurations";
 
 const SAVED_JOBS_DIRECTORY = "./src/jobs_data/out";
 
@@ -19,10 +20,12 @@ export class ExecTimeGenerator {
   taskSetId: string;
   overrunPossibility: number; // percentage
   jobs: SavedJob[] = [];
+  mode: ExecTimeGeneratorModes;
 
-  constructor(taskSet: {id: string, tasks: Task[]}, overrunPossibility: number, exactOverrunTime: number) {
+  constructor(taskSet: {id: string, tasks: Task[]}, config: SimulationConfig) {
     this.taskSetId = taskSet.id;
-    this.overrunPossibility = exactOverrunTime ? 0 : overrunPossibility;
+    this.overrunPossibility = config.overrunProbabilityPercentage;
+    this.mode = config.ExecTimeGeneratorMode;
     this.read();
   }
 
@@ -70,6 +73,10 @@ export class ExecTimeGenerator {
   }
 
   generate(jobId: string, task: Task): number {
+    if (this.mode === 'HI') return task.c.HI;
+    if (this.mode === 'LO') return task.c.LO;
+    if (this.mode === 'level') return task.c[task.level];
+    // random:
     const savedJob = this.jobs.find(j => j.id == jobId);
     if (savedJob) return Number(savedJob.time);
     else {

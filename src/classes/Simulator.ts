@@ -1,6 +1,6 @@
 import {Task} from "./base/Task";
 import {Job} from "./base/Job";
-import {HI, TaskSetInitiator} from "../types";
+import {ExecTimeGeneratorModes, HI, SimulationConfig, TaskSetInitiator} from "../types";
 import {ReadyQueue} from "./base/ReadyQueue";
 import {Scheduler} from "./base/Scheduler";
 import {CPU} from "./base/CPU";
@@ -25,15 +25,15 @@ export class Simulator {
   private generateTasksSet(set: TaskSetInitiator): { id: string; tasks: Task[] } {
     return {id: set.id, tasks: set.tasks.map(t => new Task(t, set.id))}
   }
-  constructor(duration: number, overrunProbabilityPercentage: number, taskSet: TaskSetInitiator) {
+  constructor(simulationConfig: SimulationConfig, taskSet: TaskSetInitiator) {
     SYSTEM.level = CONFIG.initialSystemLevel;
-    this.DURATION = duration;
+    this.DURATION = simulationConfig.duration;
     this.cpu = new CPU(CONFIG.frequency);
     this.readyQ = new ReadyQueue();
     this.taskSet = this.generateTasksSet(taskSet);
     this.scheduler = new Scheduler(this.readyQ, this.cpu);
-    this.execTimeGenerator = new ExecTimeGenerator(this.taskSet, overrunProbabilityPercentage, CONFIG.exactOverrunTime);
-    Log.setUp(this.readyQ, this.scheduler, this.taskSet, { overrunProbabilityPercentage, duration});
+    this.execTimeGenerator = new ExecTimeGenerator(this.taskSet, simulationConfig);
+    Log.setUp(this.readyQ, this.scheduler, this.taskSet, simulationConfig);
   }
 
   run() {
@@ -86,7 +86,7 @@ export class Simulator {
   }
 
   finishHandler(status: 'fail' | 'success', jobs?: Job[], time?: number) {
-    const save = () => {     this.execTimeGenerator.save(this.DURATION); Log.save(status, time);}
+    const save = () => { this.execTimeGenerator.save(time || this.DURATION); Log.save(status, time);}
     if(status === 'fail' && jobs && time) {
       Log.failure(time, jobs);
       save();
