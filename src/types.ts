@@ -47,4 +47,6 @@ export type TaskSetConfig = {
   u: number; // total system utilization
   CP: number; // criticality proportion
   CF: number; // criticality factor, > 1
+  minPeriod?: number;
+  maxPeriod?: number;
 }

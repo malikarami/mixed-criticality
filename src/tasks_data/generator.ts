@@ -55,9 +55,9 @@ function generateFeasibleWCET(CLO:number, CF: number, D: number): number {
 
 
 // Generate Task Sets
-function generateRandomTaskSet(n: number, totalUtilization: number, CF: number, highTasksIndexes: number[]): NewTask[] {
+function generateRandomTaskSet(n: number, totalUtilization: number, CF: number, highTasksIndexes: number[], minPeriod: number, maxPeriod: number): NewTask[] {
   const utilizations = uunifast(totalUtilization, n);
-  const periods = logUniform(1, 100, n);
+  const periods = logUniform(minPeriod, maxPeriod, n);
   const tasks: NewTask[] = utilizations.map((u, index) => {
     const period = periods[index]; // Di = Ti
     const CLO = Number((u * periods[index]).toFixed(1));
@@ -91,13 +91,13 @@ const getTotalUtilization = (set: NewTask[], level: CriticalityLevel): number =>
 }
 
 const MAX_ITERATIONS = 50000;
-const  generateFeasibleTaskSet = (n: number, totalUtilization: number, CF: number, highTasksIndexes: number[]) => {
+const  generateFeasibleTaskSet = (n: number, totalUtilization: number, CF: number, highTasksIndexes: number[], minPeriod: number, maxPeriod: number) => {
   if(CF < 1) throw new Error(`Criticality factor should be greater than 1`);
 
   let iteration = 0;
   let set: NewTask[];
   do {
-    set = generateRandomTaskSet(n, totalUtilization, CF, highTasksIndexes);
+    set = generateRandomTaskSet(n, totalUtilization, CF, highTasksIndexes, minPeriod, maxPeriod);
     iteration++;
   } while (set.some(task => !task.c.LO || !task.c.HI || task.c.LO > task.period || task.c.HI > task.period) && iteration < MAX_ITERATIONS);
 
@@ -144,8 +144,10 @@ function convertToSimulatorTaskSetFormat(data: SavedTasksData) : TaskSetInitiato
 }
 
 const generateTaskSet = (config: TaskSetConfig): TaskSetInitiator => {
-  const {n, CP, CF, u} = config;
-  const id = `${n}-${u}-${CF}-${CP}`;
+  const {n, CP, CF, u, minPeriod, maxPeriod} = config;
+  const minP = minPeriod || 1;
+  const maxP = maxPeriod || 100;
+  const id = `${n}-${u}-${CF}-${CP}-[${minP}-${maxP}]`;
   const path = `${TASKS_DIRECTORY}/${id}.xml`;
 
   const savedData: Record<string, any> | null = readFromXMLFile(path);
@@ -159,7 +161,7 @@ const generateTaskSet = (config: TaskSetConfig): TaskSetInitiator => {
   else {
     const highTasksIndexes = getRandomIntegersInInterval(Math.floor(n * CP), 0, n - 1);
     // console.log('DEBUG:', highTasksIndexes);
-    const tasks = generateFeasibleTaskSet(n, u, CF, highTasksIndexes);
+    const tasks = generateFeasibleTaskSet(n, u, CF, highTasksIndexes, minP, maxP);
     writeToXMLFile<SavedTasksData>(path, {tasks, id});
     // console.log('DEBUG:', tasks);
     console.log('task set generated to', path);

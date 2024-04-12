@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "",
   "scripts": {
-    "simulate": "tsc && node ./dist/app.js",
+    "simulate": "tsc && node ./dist/app.js"
   },
   "keywords": [
     "Mixed-Criticality",
