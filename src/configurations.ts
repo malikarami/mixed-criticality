@@ -9,7 +9,7 @@ type Configurations = {
 }
 
 const configurations : Configurations=  {
-  duration: 10, // duration for which the simulation would run
+  duration: 0, // duration for which the simulation would run
   overrunProbabilityPercentage: 50,  // probability of actual C to be grater than C(LO)
   scheduling: {
     exactOverrunTime: 0, // some integer time greater than 0, when this value is greater than 0, the overrunPossibility is ignored
@@ -20,12 +20,12 @@ const configurations : Configurations=  {
     initialSystemLevel: LO,
   },
   tasks: {
-    n: 0, // number of tasks
-    u: 2, // total system utilization
-    CF: 1.5, // criticality factor, > 1
-    CP: 2, // criticality proportion, < 1
-    minPeriod: 1,
-    maxPeriod: 100,
+    n: 4, // number of tasks
+    u: 1, // total system utilization
+    CF: 2, // criticality factor, > 1
+    CP: 0.5, // criticality proportion, < 1
+    minPeriod: 5,
+    maxPeriod: 20,
   },
   log: {
     utilization: true,

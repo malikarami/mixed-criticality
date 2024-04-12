@@ -17,4 +17,6 @@ export const CONFIG: Config = configurations.scheduling;
 Object.freeze(CONFIG);
 
 // Change in any of the simulation inputs, result into generating new taskset and jobset output files
-if(configurations.duration) new Simulator(configurations.duration, configurations.overrunProbabilityPercentage, taskSet).run();
+if(configurations.duration) {
+  new Simulator(configurations.duration, configurations.overrunProbabilityPercentage, taskSet).run();
+}

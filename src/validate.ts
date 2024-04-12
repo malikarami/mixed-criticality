@@ -17,7 +17,7 @@ function checkTasks(tasks: TaskSetConfig) {
 }
 
 function checkSimulationSettings(duration: number, overrunProbabilityPercentage: number) {
-  if(!(duration && Number.isInteger(duration) && duration >= 0)) error('duration');
+  if(!(Number.isInteger(duration) && duration >= 0)) error('duration');
   if(!(overrunProbabilityPercentage && overrunProbabilityPercentage >= 0 && overrunProbabilityPercentage <= 100)) error('overrunProbabilityPercentage');
 }
 
@@ -26,7 +26,7 @@ function checkSchedulingSettings(scheduling: Config) {
  if(!(workDonePerClock && (workDonePerClock === 0.1 || workDonePerClock === 1))) error('workDonePerClock');
  if(!(frequency && frequency > 0 && Number.isInteger(frequency))) error('frequency');
  if(!(overrunWatchingMechanism && overrunWatchingMechanism === 'per_clock')) error('overrunWatchingMechanism');
- if(!(exactOverrunTime && Number.isInteger(exactOverrunTime) && exactOverrunTime >= 0)) error('exactOverrunTime');
+ if(!(Number.isInteger(exactOverrunTime) && exactOverrunTime >= 0)) error('exactOverrunTime');
  if(!(initialSystemLevel && (initialSystemLevel === HI || initialSystemLevel === LO))) error('initialSystemLevel');
 }
 
