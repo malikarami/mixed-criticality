@@ -4,8 +4,6 @@
   "description": "",
   "scripts": {
     "simulate": "tsc && node ./dist/app.js",
-    "generate": "tsc && node ./dist/generator.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [
     "Mixed-Criticality",
