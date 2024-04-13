@@ -1,0 +1,97 @@
+<root>
+    <taskSet>4-1-10-0.8-[5-20]</taskSet>
+    <configs>
+        <duration>504</duration>
+        <overrunProbabilityPercentage>5</overrunProbabilityPercentage>
+        <ExecTimeGeneratorMode>level</ExecTimeGeneratorMode>
+        <exactOverrunTime>0</exactOverrunTime>
+        <overrunWatchingMechanism>per_clock</overrunWatchingMechanism>
+        <traditional>false</traditional>
+        <workDonePerClock>0.1</workDonePerClock>
+        <frequency>10</frequency>
+        <initialSystemLevel>LO</initialSystemLevel>
+    </configs>
+    <result>fail at 16</result>
+    <statistics>
+        <analysis>
+            <speed>1</speed>
+            <U11>0.14545454545454548</U11>
+            <U12>1</U12>
+            <U21>0.2986111111111111</U21>
+            <U22>1.6111111111111112</U22>
+            <u>-0.4886363636363636</u>
+            <vdf>0.3494385342789598</vdf>
+            <taskSetCheck>true</taskSetCheck>
+            <necessaryCheck>false</necessaryCheck>
+            <sufficientCheck>true</sufficientCheck>
+            <mechanism>edf-vd</mechanism>
+        </analysis>
+        <modeChange>
+            <time>0.4</time>
+            <reason>overrun</reason>
+        </modeChange>
+        <preemptions>
+            <LObyLO>0</LObyLO>
+            <LObyHI>0</LObyHI>
+            <HIbyLO>0</HIbyLO>
+            <HIbyHI>0</HIbyHI>
+        </preemptions>
+        <deadlineMisses>
+            <HI>0</HI>
+            <LO>0</LO>
+        </deadlineMisses>
+        <totalJobs>
+            <LO>1</LO>
+            <HI>5</HI>
+            <ignored>1</ignored>
+        </totalJobs>
+        <finishedJobs>
+            <HI>2</HI>
+            <LO>0</LO>
+        </finishedJobs>
+        <utilization>
+            <expected>
+                <U11>0.14545454545454548</U11>
+                <U21>0.2986111111111111</U21>
+                <U22>1.6111111111111112</U22>
+            </expected>
+            <actual>
+                <U11>0</U11>
+                <U12>0</U12>
+                <U21>0.01984126984126984</U21>
+                <U22>0.011904761904761904</U22>
+            </actual>
+            <totalUnitsOfWork>504.00000000000006</totalUnitsOfWork>
+        </utilization>
+        <responseTime>
+            <T-1>
+                <min>6</min>
+                <max>Infinity</max>
+                <avg>6</avg>
+            </T-1>
+            <T-2>
+                <min>4</min>
+                <max>Infinity</max>
+                <avg>4</avg>
+            </T-2>
+            <T-3>
+                <min/>
+                <max>Infinity</max>
+                <avg>NaN</avg>
+            </T-3>
+            <T-4>
+                <min/>
+                <max>Infinity</max>
+                <avg>NaN</avg>
+            </T-4>
+        </responseTime>
+    </statistics>
+    <schedule>
+        <t-0>T2 (J0)</t-0>
+        <t-0.4>T2 (J0)</t-0.4>
+        <t-4>T1 (J0)</t-4>
+        <t-6>T3 (J0)</t-6>
+        <t-9>T3 (J0)</t-9>
+        <t-12>T3 (J0)</t-12>
+    </schedule>
+</root>

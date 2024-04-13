@@ -21,14 +21,14 @@ const configurations : Configurations=  {
     overrunWatchingMechanism: "per_clock", // deprecated -> ignore
     traditional: false, // traditional EDF instead of EDF-VD
     workDonePerClock: 0.1, // indicating amount of work done in each clock -> main purpose: customizing the simulation for floating point values (example: a CPU with speed less than one)
-    frequency: 12, // f clock per time unit => (f * wpc) operation done in time unit = CPU Speed
+    frequency: 10, // f clock per time unit => (f * wpc) operation done in time unit = CPU Speed
     initialSystemLevel: LO,
   },
   tasks: {
     n: 4, // number of tasks
-    u: 1, // total system utilization
-    CF: 2, // criticality factor, > 1
-    CP: 0.5, // criticality proportion, < 1
+    u: 0.8, // total system utilization
+    CF: 1.558, // criticality factor, > 1
+    CP: 0.44, // criticality proportion, < 1
     minPeriod: 5,
     maxPeriod: 20,
   },
