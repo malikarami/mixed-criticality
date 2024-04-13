@@ -59,12 +59,14 @@ export class ExecTimeGenerator {
   }
 
   read() {
-    const rawData = readFromXMLFile(this.filePath);
-    const data = this.parse(rawData);
-    // console.log('DEBUG', data, rawData);
-    if (data && data.jobs && data.overrunPossibility == this.overrunPossibility) {
-      this.jobs = data.jobs;
-      this.savedDataDuration = data.duration;
+    if (this.mode === 'random') {
+      const rawData = readFromXMLFile(this.filePath);
+      const data = this.parse(rawData);
+      // console.log('DEBUG', data, rawData);
+      if (data && data.jobs && data.overrunPossibility == this.overrunPossibility) {
+        this.jobs = data.jobs;
+        this.savedDataDuration = data.duration;
+      }
     }
   }
 

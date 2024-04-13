@@ -5,6 +5,7 @@ import {CONFIG} from "../app";
 import { HI, LO, LogLevelSettings, SimulationConfig} from "../types";
 import {writeToXMLFile} from "../utils";
 import {Task} from "./base/Task";
+import {SYSTEM} from "./System";
 
 const OUTPUT_DIRECTORY = './src/result';
 
@@ -217,9 +218,11 @@ export class Logger {
     if(this.off || !this.setting.failure) return;
     console.error(
       "---> 🧨 jobs",
-      jobs.map((j) => `${j.id} (passing C(LO): ${j.minimumExecutionTime} by ${j.overrun} units overrun | d: ${j.deadline})`),
-      "missed high criticality deadlines at:",
-      time
+      jobs.map((j) => `${j.id} of level ${j.level} (passing C(LO): ${j.minimumExecutionTime} by ${j.overrun} units overrun | d: ${j.deadline})`),
+      "missed deadlines at:",
+      time,
+      'System level:',
+      SYSTEM.level
     );
     console.log(
       "❌❌❌❌❌❌❌❌❌❌❌❌❌❌❌❌❌❌❌❌❌❌❌❌❌❌❌❌❌❌❌❌❌❌❌❌     "

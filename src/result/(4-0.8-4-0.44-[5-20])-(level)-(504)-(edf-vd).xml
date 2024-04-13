@@ -1,0 +1,155 @@
+<root>
+    <taskSet>4-0.8-4-0.44-[5-20]</taskSet>
+    <configs>
+        <duration>504</duration>
+        <overrunProbabilityPercentage>5</overrunProbabilityPercentage>
+        <ExecTimeGeneratorMode>level</ExecTimeGeneratorMode>
+        <exactOverrunTime>0</exactOverrunTime>
+        <overrunWatchingMechanism>per_clock</overrunWatchingMechanism>
+        <traditional>false</traditional>
+        <workDonePerClock>0.1</workDonePerClock>
+        <frequency>10</frequency>
+        <initialSystemLevel>LO</initialSystemLevel>
+    </configs>
+    <result>success</result>
+    <statistics>
+        <analysis>
+            <speed>1</speed>
+            <U11>0.6456073338426279</U11>
+            <U12>1.8369747899159665</U12>
+            <U21>0.1375</U21>
+            <U22>0.55</U22>
+            <u>0.30555555555555564</u>
+            <vdf>0.38798771286915285</vdf>
+            <taskSetCheck>true</taskSetCheck>
+            <necessaryCheck>true</necessaryCheck>
+            <sufficientCheck>true</sufficientCheck>
+            <mechanism>edf-vd</mechanism>
+        </analysis>
+        <modeChange>
+            <time>2.2</time>
+            <reason>overrun</reason>
+        </modeChange>
+        <preemptions>
+            <LObyLO>0</LObyLO>
+            <LObyHI>0</LObyHI>
+            <HIbyLO>0</HIbyLO>
+            <HIbyHI>0</HIbyHI>
+        </preemptions>
+        <deadlineMisses>
+            <HI>0</HI>
+            <LO>0</LO>
+        </deadlineMisses>
+        <totalJobs>
+            <LO>3</LO>
+            <HI>32</HI>
+            <ignored>145</ignored>
+        </totalJobs>
+        <finishedJobs>
+            <HI>31</HI>
+            <LO>0</LO>
+        </finishedJobs>
+        <utilization>
+            <expected>
+                <U11>0.6456073338426279</U11>
+                <U21>0.1375</U21>
+                <U22>0.55</U22>
+            </expected>
+            <actual>
+                <U11>0</U11>
+                <U12>0</U12>
+                <U21>0</U21>
+                <U22>0.5571428571428573</U22>
+            </actual>
+            <totalUnitsOfWork>504.00000000000006</totalUnitsOfWork>
+        </utilization>
+        <responseTime>
+            <T-1>
+                <min/>
+                <max>Infinity</max>
+                <avg>NaN</avg>
+            </T-1>
+            <T-2>
+                <min/>
+                <max>Infinity</max>
+                <avg>NaN</avg>
+            </T-2>
+            <T-3>
+                <min/>
+                <max>Infinity</max>
+                <avg>NaN</avg>
+            </T-3>
+            <T-4>
+                <min>8.8</min>
+                <max>Infinity</max>
+                <avg>8.800000000000004</avg>
+            </T-4>
+        </responseTime>
+    </statistics>
+    <schedule>
+        <t-0>T4 (J0)</t-0>
+        <t-2.2>T4 (J0)</t-2.2>
+        <t-8.8>IDLE</t-8.8>
+        <t-16>T4 (J1)</t-16>
+        <t-24.8>IDLE</t-24.8>
+        <t-32>T4 (J2)</t-32>
+        <t-40.8>IDLE</t-40.8>
+        <t-48>T4 (J3)</t-48>
+        <t-56.8>IDLE</t-56.8>
+        <t-64>T4 (J4)</t-64>
+        <t-72.8>IDLE</t-72.8>
+        <t-80>T4 (J5)</t-80>
+        <t-88.8>IDLE</t-88.8>
+        <t-96>T4 (J6)</t-96>
+        <t-104.8>IDLE</t-104.8>
+        <t-112>T4 (J7)</t-112>
+        <t-120.8>IDLE</t-120.8>
+        <t-128>T4 (J8)</t-128>
+        <t-136.8>IDLE</t-136.8>
+        <t-144>T4 (J9)</t-144>
+        <t-152.8>IDLE</t-152.8>
+        <t-160>T4 (J10)</t-160>
+        <t-168.8>IDLE</t-168.8>
+        <t-176>T4 (J11)</t-176>
+        <t-184.8>IDLE</t-184.8>
+        <t-192>T4 (J12)</t-192>
+        <t-200.8>IDLE</t-200.8>
+        <t-208>T4 (J13)</t-208>
+        <t-216.8>IDLE</t-216.8>
+        <t-224>T4 (J14)</t-224>
+        <t-232.8>IDLE</t-232.8>
+        <t-240>T4 (J15)</t-240>
+        <t-248.8>IDLE</t-248.8>
+        <t-256>T4 (J16)</t-256>
+        <t-264.8>IDLE</t-264.8>
+        <t-272>T4 (J17)</t-272>
+        <t-280.8>IDLE</t-280.8>
+        <t-288>T4 (J18)</t-288>
+        <t-296.8>IDLE</t-296.8>
+        <t-304>T4 (J19)</t-304>
+        <t-312.8>IDLE</t-312.8>
+        <t-320>T4 (J20)</t-320>
+        <t-328.8>IDLE</t-328.8>
+        <t-336>T4 (J21)</t-336>
+        <t-344.8>IDLE</t-344.8>
+        <t-352>T4 (J22)</t-352>
+        <t-360.8>IDLE</t-360.8>
+        <t-368>T4 (J23)</t-368>
+        <t-376.8>IDLE</t-376.8>
+        <t-384>T4 (J24)</t-384>
+        <t-392.8>IDLE</t-392.8>
+        <t-400>T4 (J25)</t-400>
+        <t-408.8>IDLE</t-408.8>
+        <t-416>T4 (J26)</t-416>
+        <t-424.8>IDLE</t-424.8>
+        <t-432>T4 (J27)</t-432>
+        <t-440.8>IDLE</t-440.8>
+        <t-448>T4 (J28)</t-448>
+        <t-456.8>IDLE</t-456.8>
+        <t-464>T4 (J29)</t-464>
+        <t-472.8>IDLE</t-472.8>
+        <t-480>T4 (J30)</t-480>
+        <t-488.8>IDLE</t-488.8>
+        <t-496>T4 (J31)</t-496>
+    </schedule>
+</root>

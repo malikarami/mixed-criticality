@@ -1,0 +1,253 @@
+<root>
+    <taskSet>4-0.7-4-0.5-[1-100]</taskSet>
+    <configs>
+        <duration>504</duration>
+        <overrunProbabilityPercentage>5</overrunProbabilityPercentage>
+        <ExecTimeGeneratorMode>level</ExecTimeGeneratorMode>
+        <exactOverrunTime>0</exactOverrunTime>
+        <overrunWatchingMechanism>per_clock</overrunWatchingMechanism>
+        <traditional>false</traditional>
+        <workDonePerClock>0.1</workDonePerClock>
+        <frequency>10</frequency>
+        <initialSystemLevel>LO</initialSystemLevel>
+    </configs>
+    <result>success</result>
+    <statistics>
+        <analysis>
+            <speed>1</speed>
+            <U11>0.19166666666666668</U11>
+            <U12>0.7666666666666667</U12>
+            <U21>0.18888888888888888</U21>
+            <U22>0.7555555555555555</U22>
+            <u>0.7727272727272726</u>
+            <vdf>0.23367697594501718</vdf>
+            <taskSetCheck>true</taskSetCheck>
+            <necessaryCheck>true</necessaryCheck>
+            <sufficientCheck>true</sufficientCheck>
+            <mechanism>edf</mechanism>
+        </analysis>
+        <modeChange>
+            <time>1</time>
+            <reason>overrun</reason>
+        </modeChange>
+        <preemptions>
+            <LObyLO>0</LObyLO>
+            <LObyHI>0</LObyHI>
+            <HIbyLO>0</HIbyLO>
+            <HIbyHI>28</HIbyHI>
+        </preemptions>
+        <deadlineMisses>
+            <HI>0</HI>
+            <LO>0</LO>
+        </deadlineMisses>
+        <totalJobs>
+            <LO>2</LO>
+            <HI>82</HI>
+            <ignored>256</ignored>
+        </totalJobs>
+        <finishedJobs>
+            <HI>81</HI>
+            <LO>1</LO>
+        </finishedJobs>
+        <utilization>
+            <expected>
+                <U11>0.19166666666666668</U11>
+                <U21>0.18888888888888888</U21>
+                <U22>0.7555555555555555</U22>
+            </expected>
+            <actual>
+                <U11>0.0003968253968253968</U11>
+                <U12>0</U12>
+                <U21>0</U21>
+                <U22>0.7603174603174601</U22>
+            </actual>
+            <totalUnitsOfWork>504.00000000000006</totalUnitsOfWork>
+        </utilization>
+        <responseTime>
+            <T-1>
+                <min>3.2</min>
+                <max>3.4</max>
+                <avg>3.2107142857142845</avg>
+            </T-1>
+            <T-2>
+                <min/>
+                <max>Infinity</max>
+                <avg>NaN</avg>
+            </T-2>
+            <T-3>
+                <min>11.2</min>
+                <max>Infinity</max>
+                <avg>12.408000000000001</avg>
+            </T-3>
+            <T-4>
+                <min>0.2</min>
+                <max>Infinity</max>
+                <avg>0.2</avg>
+            </T-4>
+        </responseTime>
+    </statistics>
+    <schedule>
+        <t-0>T4 (J0)</t-0>
+        <t-0.2>T1 (J0)</t-0.2>
+        <t-1>T1 (J0)</t-1>
+        <t-3.4>T3 (J0)</t-3.4>
+        <t-9>T1 (J1)</t-9>
+        <t-12.2>T3 (J0)</t-12.2>
+        <t-14.6>IDLE</t-14.6>
+        <t-18>T1 (J2)</t-18>
+        <t-20>T1 (J2)</t-20>
+        <t-21.2>T3 (J1)</t-21.2>
+        <t-27>T1 (J3)</t-27>
+        <t-30.2>T3 (J1)</t-30.2>
+        <t-32.4>IDLE</t-32.4>
+        <t-36>T1 (J4)</t-36>
+        <t-39.2>IDLE</t-39.2>
+        <t-40>T3 (J2)</t-40>
+        <t-45>T1 (J5)</t-45>
+        <t-48.2>T3 (J2)</t-48.2>
+        <t-51.2>IDLE</t-51.2>
+        <t-54>T1 (J6)</t-54>
+        <t-57.2>IDLE</t-57.2>
+        <t-60>T3 (J3)</t-60>
+        <t-63>T1 (J7)</t-63>
+        <t-66.2>T3 (J3)</t-66.2>
+        <t-71.2>IDLE</t-71.2>
+        <t-72>T1 (J8)</t-72>
+        <t-75.2>IDLE</t-75.2>
+        <t-80>T3 (J4)</t-80>
+        <t-81>T1 (J9)</t-81>
+        <t-84.2>T3 (J4)</t-84.2>
+        <t-90>T1 (J10)</t-90>
+        <t-93.2>T3 (J4)</t-93.2>
+        <t-94.4>IDLE</t-94.4>
+        <t-99>T1 (J11)</t-99>
+        <t-100>T1 (J11)</t-100>
+        <t-102.2>T3 (J5)</t-102.2>
+        <t-108>T1 (J12)</t-108>
+        <t-111.2>T3 (J5)</t-111.2>
+        <t-113.4>IDLE</t-113.4>
+        <t-117>T1 (J13)</t-117>
+        <t-120>T1 (J13)</t-120>
+        <t-120.2>T3 (J6)</t-120.2>
+        <t-126>T1 (J14)</t-126>
+        <t-129.2>T3 (J6)</t-129.2>
+        <t-131.4>IDLE</t-131.4>
+        <t-135>T1 (J15)</t-135>
+        <t-138.2>IDLE</t-138.2>
+        <t-140>T3 (J7)</t-140>
+        <t-144>T1 (J16)</t-144>
+        <t-147.2>T3 (J7)</t-147.2>
+        <t-151.2>IDLE</t-151.2>
+        <t-153>T1 (J17)</t-153>
+        <t-156.2>IDLE</t-156.2>
+        <t-160>T3 (J8)</t-160>
+        <t-162>T1 (J18)</t-162>
+        <t-165.2>T3 (J8)</t-165.2>
+        <t-171>T3 (J8)</t-171>
+        <t-171.2>T1 (J19)</t-171.2>
+        <t-174.4>IDLE</t-174.4>
+        <t-180>T1 (J20)</t-180>
+        <t-183.2>T3 (J9)</t-183.2>
+        <t-189>T1 (J21)</t-189>
+        <t-192.2>T3 (J9)</t-192.2>
+        <t-194.4>IDLE</t-194.4>
+        <t-198>T1 (J22)</t-198>
+        <t-200>T1 (J22)</t-200>
+        <t-201.2>T3 (J10)</t-201.2>
+        <t-207>T1 (J23)</t-207>
+        <t-210.2>T3 (J10)</t-210.2>
+        <t-212.4>IDLE</t-212.4>
+        <t-216>T1 (J24)</t-216>
+        <t-219.2>IDLE</t-219.2>
+        <t-220>T3 (J11)</t-220>
+        <t-225>T1 (J25)</t-225>
+        <t-228.2>T3 (J11)</t-228.2>
+        <t-231.2>IDLE</t-231.2>
+        <t-234>T1 (J26)</t-234>
+        <t-237.2>IDLE</t-237.2>
+        <t-240>T3 (J12)</t-240>
+        <t-243>T1 (J27)</t-243>
+        <t-246.2>T3 (J12)</t-246.2>
+        <t-251.2>IDLE</t-251.2>
+        <t-252>T1 (J28)</t-252>
+        <t-255.2>IDLE</t-255.2>
+        <t-260>T3 (J13)</t-260>
+        <t-261>T1 (J29)</t-261>
+        <t-264.2>T3 (J13)</t-264.2>
+        <t-270>T1 (J30)</t-270>
+        <t-273.2>T3 (J13)</t-273.2>
+        <t-274.4>IDLE</t-274.4>
+        <t-279>T1 (J31)</t-279>
+        <t-280>T1 (J31)</t-280>
+        <t-282.2>T3 (J14)</t-282.2>
+        <t-288>T1 (J32)</t-288>
+        <t-291.2>T3 (J14)</t-291.2>
+        <t-293.4>IDLE</t-293.4>
+        <t-297>T1 (J33)</t-297>
+        <t-300>T1 (J33)</t-300>
+        <t-300.2>T3 (J15)</t-300.2>
+        <t-306>T1 (J34)</t-306>
+        <t-309.2>T3 (J15)</t-309.2>
+        <t-311.4>IDLE</t-311.4>
+        <t-315>T1 (J35)</t-315>
+        <t-318.2>IDLE</t-318.2>
+        <t-320>T3 (J16)</t-320>
+        <t-324>T1 (J36)</t-324>
+        <t-327.2>T3 (J16)</t-327.2>
+        <t-331.2>IDLE</t-331.2>
+        <t-333>T1 (J37)</t-333>
+        <t-336.2>IDLE</t-336.2>
+        <t-340>T3 (J17)</t-340>
+        <t-342>T1 (J38)</t-342>
+        <t-345.2>T3 (J17)</t-345.2>
+        <t-351>T3 (J17)</t-351>
+        <t-351.2>T1 (J39)</t-351.2>
+        <t-354.4>IDLE</t-354.4>
+        <t-360>T1 (J40)</t-360>
+        <t-363.2>T3 (J18)</t-363.2>
+        <t-369>T1 (J41)</t-369>
+        <t-372.2>T3 (J18)</t-372.2>
+        <t-374.4>IDLE</t-374.4>
+        <t-378>T1 (J42)</t-378>
+        <t-380>T1 (J42)</t-380>
+        <t-381.2>T3 (J19)</t-381.2>
+        <t-387>T1 (J43)</t-387>
+        <t-390.2>T3 (J19)</t-390.2>
+        <t-392.4>IDLE</t-392.4>
+        <t-396>T1 (J44)</t-396>
+        <t-399.2>IDLE</t-399.2>
+        <t-400>T3 (J20)</t-400>
+        <t-405>T1 (J45)</t-405>
+        <t-408.2>T3 (J20)</t-408.2>
+        <t-411.2>IDLE</t-411.2>
+        <t-414>T1 (J46)</t-414>
+        <t-417.2>IDLE</t-417.2>
+        <t-420>T3 (J21)</t-420>
+        <t-423>T1 (J47)</t-423>
+        <t-426.2>T3 (J21)</t-426.2>
+        <t-431.2>IDLE</t-431.2>
+        <t-432>T1 (J48)</t-432>
+        <t-435.2>IDLE</t-435.2>
+        <t-440>T3 (J22)</t-440>
+        <t-441>T1 (J49)</t-441>
+        <t-444.2>T3 (J22)</t-444.2>
+        <t-450>T1 (J50)</t-450>
+        <t-453.2>T3 (J22)</t-453.2>
+        <t-454.4>IDLE</t-454.4>
+        <t-459>T1 (J51)</t-459>
+        <t-460>T1 (J51)</t-460>
+        <t-462.2>T3 (J23)</t-462.2>
+        <t-468>T1 (J52)</t-468>
+        <t-471.2>T3 (J23)</t-471.2>
+        <t-473.4>IDLE</t-473.4>
+        <t-477>T1 (J53)</t-477>
+        <t-480>T1 (J53)</t-480>
+        <t-480.2>T3 (J24)</t-480.2>
+        <t-486>T1 (J54)</t-486>
+        <t-489.2>T3 (J24)</t-489.2>
+        <t-491.4>IDLE</t-491.4>
+        <t-495>T1 (J55)</t-495>
+        <t-498.2>IDLE</t-498.2>
+        <t-500>T3 (J25)</t-500>
+    </schedule>
+</root>

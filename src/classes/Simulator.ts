@@ -130,6 +130,8 @@ export class Simulator {
     const missedJobs = this.readyQ.getDeadlineMisses(elapsedTime);
     // check if the job has missed deadline (all jobs must be checked)
     if (missedJobs.length) {
+      const atLevelMisses = missedJobs.filter(job => job.level === SYSTEM.level);
+      if(atLevelMisses.length) this.finishHandler('fail', atLevelMisses, elapsedTime);
       Log.deadlineMiss(elapsedTime, missedJobs);
       this.readyQ.batchPop(missedJobs);
     }
