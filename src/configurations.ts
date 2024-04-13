@@ -14,7 +14,7 @@ const configurations : Configurations=  {
   simulation: {
     duration: 990, // duration for which the simulation would run
     overrunProbabilityPercentage: 0,  // probability of actual C to be grater than C(LO)
-    ExecTimeGeneratorMode: 'random',
+    ExecTimeGeneratorMode: 'LO',
   },
   scheduling: {
     exactOverrunTime: 0, // some integer time greater than 0, when this value is greater than 0, the overrunPossibility is ignored

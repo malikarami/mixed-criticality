@@ -87,7 +87,7 @@ export class Scheduler {
     const necessaryCheck = this.necessityCheck(speed)({U11, U21, U22});
     const sufficientCheck = this.sufficiencyCheck(speed)({U11, U22, U21, u});
 
-    Log.utilization({speed, U11, U12, U21, U22, u, taskSetCheck, necessaryCheck, sufficientCheck});
+    Log.utilization({speed, U11, U12, U21, U22, vdf: u, taskSetCheck, necessaryCheck, sufficientCheck});
 
     let isFeasible = taskSetCheck &&  necessaryCheck && sufficientCheck;
 

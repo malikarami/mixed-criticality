@@ -113,14 +113,14 @@ export class Logger {
     this.simulationConfig = c;
   }
 
-  utilization(data: { speed: number, U11: number; U22: number; U21: number; u: number; U12: number, necessaryCheck: boolean, sufficientCheck: boolean, taskSetCheck: boolean }) {
+  utilization(data: { speed: number, U11: number; U22: number; U21: number; vdf: number; U12: number, necessaryCheck: boolean, sufficientCheck: boolean, taskSetCheck: boolean }) {
     this.stats.analysis = {
       ...this.stats.analysis,
       taskSetCheck: data.taskSetCheck,
       necessaryCheck: data.necessaryCheck,
       sufficientCheck: data.sufficientCheck,
       case1_U11_PLUS_U22: data.U11 + data.U22,
-      case2_Virtual_Deadline: data.u,
+      case2_Virtual_Deadline: data.vdf,
     };
     this.stats.utilization.expected = {U11: data.U11, U21: data.U21, U22: data.U22};
     if (this.off || !this.setting.utilization) return;
