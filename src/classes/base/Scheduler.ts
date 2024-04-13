@@ -51,7 +51,7 @@ export class Scheduler {
           return U22 <= speed;
         }
         if (SYSTEM.level === LO) {
-          return (U21 + U11) <= speed;
+          return (U22 + U11) <= speed;
         }
       }
       else if (U11 + U21 <= speed && U22 <= speed) return true;
