@@ -31,7 +31,7 @@ export class ExecTimeGenerator {
 
   save(currentSimulationDuration: number) {
     // console.log('DEBUG: these are your jobs', this.jobs);
-    if (currentSimulationDuration > this.savedDataDuration) {
+    if (this.mode === 'random' && currentSimulationDuration > this.savedDataDuration) {
       writeToXMLFile<SavedActualExecTimesData>(this.filePath, {
         overrunPossibility: this.overrunPossibility,
         duration: currentSimulationDuration,
