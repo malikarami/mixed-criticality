@@ -12,16 +12,16 @@ type Configurations = {
 
 const configurations : Configurations=  {
   simulation: {
-    duration: 990, // duration for which the simulation would run
-    overrunProbabilityPercentage: 0,  // probability of actual C to be grater than C(LO)
-    ExecTimeGeneratorMode: 'level',
+    duration: 504, // duration for which the simulation would run
+    overrunProbabilityPercentage: 5,  // probability of actual C to be grater than C(LO)
+    ExecTimeGeneratorMode: "level",
   },
   scheduling: {
     exactOverrunTime: 0, // some integer time greater than 0, when this value is greater than 0, the overrunPossibility is ignored
     overrunWatchingMechanism: "per_clock", // deprecated -> ignore
-    traditional: true, // traditional EDF instead of EDF-VD
+    traditional: false, // traditional EDF instead of EDF-VD
     workDonePerClock: 0.1, // indicating amount of work done in each clock -> main purpose: customizing the simulation for floating point values (example: a CPU with speed less than one)
-    frequency: 10, // f clock per time unit => (f * wpc) operation done in time unit = CPU Speed
+    frequency: 12, // f clock per time unit => (f * wpc) operation done in time unit = CPU Speed
     initialSystemLevel: LO,
   },
   tasks: {
@@ -40,7 +40,7 @@ const configurations : Configurations=  {
       arrival: false,
       feasibilityTest: true,
       preemption: false,
-      overrun: false,
+      overrun: true,
       jobFinish: false,
       deadlineMiss: true,
       dispatch: false,

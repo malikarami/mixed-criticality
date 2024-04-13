@@ -1,65 +1,73 @@
 <root>
-    <taskSet>4-1-2-0.5-[5-20]</taskSet>
+    <taskSet>4-1-5-0.5-[5-20]</taskSet>
     <configs>
-        <duration>990</duration>
-        <overrunProbabilityPercentage>0</overrunProbabilityPercentage>
+        <duration>504</duration>
+        <overrunProbabilityPercentage>5</overrunProbabilityPercentage>
         <ExecTimeGeneratorMode>level</ExecTimeGeneratorMode>
         <exactOverrunTime>0</exactOverrunTime>
         <overrunWatchingMechanism>per_clock</overrunWatchingMechanism>
-        <traditional>true</traditional>
+        <traditional>false</traditional>
         <workDonePerClock>0.1</workDonePerClock>
         <frequency>10</frequency>
         <initialSystemLevel>LO</initialSystemLevel>
     </configs>
-    <result>fail at 10</result>
+    <result>fail at 13</result>
     <statistics>
         <analysis>
+            <speed>1</speed>
+            <U11>0.17708333333333331</U11>
+            <U12>0.8854166666666666</U12>
+            <U21>0.5348178137651822</U21>
+            <U22>1.2894736842105263</U22>
+            <u>-1.8475524475524476</u>
+            <vdf>0.6499051914108543</vdf>
             <taskSetCheck>true</taskSetCheck>
             <necessaryCheck>false</necessaryCheck>
             <sufficientCheck>true</sufficientCheck>
-            <case1_U11_PLUS_U22>1.39010101010101</case1_U11_PLUS_U22>
-            <case2_Virtual_Deadline>-3.462962962962964</case2_Virtual_Deadline>
-            <mechanism>edf</mechanism>
+            <mechanism>edf-vd</mechanism>
         </analysis>
-        <modeChange/>
+        <modeChange>
+            <time>7</time>
+            <reason>overrun</reason>
+        </modeChange>
         <preemptions>
             <LObyLO>0</LObyLO>
-            <LObyHI>1</LObyHI>
+            <LObyHI>0</LObyHI>
             <HIbyLO>0</HIbyLO>
             <HIbyHI>0</HIbyHI>
         </preemptions>
         <deadlineMisses>
             <HI>0</HI>
-            <LO>1</LO>
+            <LO>0</LO>
         </deadlineMisses>
         <totalJobs>
             <LO>3</LO>
-            <HI>3</HI>
-            <ignored>0</ignored>
+            <HI>2</HI>
+            <ignored>1</ignored>
         </totalJobs>
         <finishedJobs>
-            <HI>1</HI>
-            <LO>0</LO>
+            <HI>0</HI>
+            <LO>1</LO>
         </finishedJobs>
         <utilization>
             <expected>
-                <U11>0.2101010101010101</U11>
-                <U21>0.6233333333333333</U21>
-                <U22>1.18</U22>
+                <U11>0.17708333333333331</U11>
+                <U21>0.5348178137651822</U21>
+                <U22>1.2894736842105263</U22>
             </expected>
             <actual>
-                <U11>0</U11>
+                <U11>0.0015873015873015873</U11>
                 <U12>0</U12>
-                <U21>0.0101010101010101</U21>
+                <U21>0.024206349206349204</U21>
                 <U22>0</U22>
             </actual>
-            <totalUnitsOfWork>990</totalUnitsOfWork>
+            <totalUnitsOfWork>504.00000000000006</totalUnitsOfWork>
         </utilization>
         <responseTime>
             <T-1>
-                <min>9</min>
+                <min/>
                 <max>Infinity</max>
-                <avg>9</avg>
+                <avg>NaN</avg>
             </T-1>
             <T-2>
                 <min/>
@@ -67,9 +75,9 @@
                 <avg>NaN</avg>
             </T-2>
             <T-3>
-                <min/>
+                <min>0.8</min>
                 <max>Infinity</max>
-                <avg>NaN</avg>
+                <avg>0.8</avg>
             </T-3>
             <T-4>
                 <min/>
@@ -79,7 +87,9 @@
         </responseTime>
     </statistics>
     <schedule>
-        <t-0>T1 (J0)</t-0>
-        <t-9>T2 (J0)</t-9>
+        <t-0>T3 (J0)</t-0>
+        <t-0.8>T2 (J0)</t-0.8>
+        <t-6>T2 (J0)</t-6>
+        <t-7>T2 (J0)</t-7>
     </schedule>
 </root>

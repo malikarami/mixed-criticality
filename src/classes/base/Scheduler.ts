@@ -44,58 +44,54 @@ export class Scheduler {
     return job;
   }
 
-  necessityCheck(speed: number) {
-    return ({U11, U21, U22}: {U11: number, U21: number, U22: number}): boolean => {
+  necessityCheck({U11, U21, U22}: {U11: number, U21: number, U22: number}): {result: boolean, method: string} {
       if (CONFIG.traditional) {
         if (SYSTEM.level === HI) {
-          return U22 <= speed;
+          return {result: U22 <= 1, method: 'U22 <= 1'};
         }
         if (SYSTEM.level === LO) {
-          return (U22 + U11) <= speed;
+          return {result: (U22 + U11) <= 1, method: '(U22 + U11) <= 1'};
         }
       }
-      else if (U11 + U21 <= speed && U22 <= speed) return true;
-      return false;
+      else if ((U11 + U21 <= 1) && (U22 <= 1)) return {result: true, method: '(U11 + U21 <= 1) && (U22 <= 1)'};
+      return {result: false, method: '(U11 + U21 <= 1) && (U22 <= 1)'};
     };
-  }
 
-  sufficiencyCheck(speed: number) {
-    return ({U11, U22, U21, u}:{U11: number, U22: number, U21: number, u: number}): boolean => {
+  sufficiencyCheck({U11, U22, U21, u}:{U11: number, U22: number, U21: number, u: number}): {result: boolean, method: string} {
       if (CONFIG.traditional) {
         if (SYSTEM.level === HI) {
-          return U21 <= speed;
+          return {result: U21 <= 1, method: 'U21 <= 1'};
         }
         if (SYSTEM.level === LO) {
-          return (U21 + U11) <= speed;
+          return {result: (U21 + U11) <= 1, method: '(U21 + U11) <= 1'};
         }
       }
-      if (U11 + U22 <= speed || (u > 0 && U11 + u <= speed)) return true;
-      return false;
+      return {result: (U11 + U22 <= 1) || ((U11 + u <= 1)), method: `(U11 + U22 <= 1): ${(U11 + U22 <= 1)} OR (U11 + u <= 1): ${(U11 + u <= 1)}`};
     };
-  }
 
   analyse(tasks: Task[]) {
     const speed = CONFIG.frequency * CONFIG.workDonePerClock;
 
-    const U11 = Utilization(tasks)(LO, LO); // utilization of tasks of level LO in a LO system
-    const U12 = Utilization(tasks)(LO, HI); // utilization of tasks of level LO in a HI system
-    const U21 = Utilization(tasks)(HI, LO); // utilization of tasks of level HI in a LO system
-    const U22 = Utilization(tasks)(HI, HI); // utilization of tasks of level HI in a HI system
-    const u = U21 / (speed - U22);
+    const U11 = Utilization(tasks)(LO, LO) / speed; // utilization of tasks of level LO in a LO system
+    const U12 = Utilization(tasks)(LO, HI) / speed; // utilization of tasks of level LO in a HI system
+    const U21 = Utilization(tasks)(HI, LO) / speed; // utilization of tasks of level HI in a LO system
+    const U22 = Utilization(tasks)(HI, HI) / speed; // utilization of tasks of level HI in a HI system
+    const u = U21 / (1 - U22);
+    const vdf = U21 / (1 - U11);
 
     const taskSetCheck = !tasks.some(t => t.c.LO > t.period || t.c.HI > t.period);
-    const necessaryCheck = this.necessityCheck(speed)({U11, U21, U22});
-    const sufficientCheck = this.sufficiencyCheck(speed)({U11, U22, U21, u});
+    const necessaryCheck = this.necessityCheck({U11, U21, U22});
+    const sufficientCheck = this.sufficiencyCheck({U11, U22, U21, u});
 
-    Log.utilization({speed, U11, U12, U21, U22, vdf: u, taskSetCheck, necessaryCheck, sufficientCheck});
+    Log.utilization({speed, U11, U12, U21, U22, u, vdf, taskSetCheck, necessaryCheck, sufficientCheck});
 
-    let isFeasible = taskSetCheck &&  necessaryCheck && sufficientCheck;
+    let isFeasible = taskSetCheck &&  necessaryCheck.result && sufficientCheck.result;
 
-    if (CONFIG.traditional || U11 + U22 <= speed) {
+    if (CONFIG.traditional || U11 + U22 <= 1) {
       this.policy = "edf";
       SYSTEM.virtualDeadlineFactor = 1;
-    } else if (U11 + u <= speed && u > 0) {
-      SYSTEM.virtualDeadlineFactor = u;
+    } else if ((U11 + u <= 1) && (vdf > 0)) {
+      SYSTEM.virtualDeadlineFactor = vdf;
       this.policy = "edf-vd";
     }
 
