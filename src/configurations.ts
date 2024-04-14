@@ -12,42 +12,42 @@ type Configurations = {
 
 const configurations : Configurations=  {
   simulation: {
-    duration: 990, // duration for which the simulation would run
+    duration: 5, // duration for which the simulation would run
     overrunProbabilityPercentage: 0,  // probability of actual C to be grater than C(LO)
     ExecTimeGeneratorMode: "level",
   },
   scheduling: {
-    exactOverrunTime: 0, // some integer time greater than 0, when this value is greater than 0, the overrunPossibility is ignored
+    exactOverrunTime: 2, // some integer time greater than 0, when this value is greater than 0, the overrunPossibility is ignored
     overrunWatchingMechanism: "per_clock", // deprecated -> ignore
-    traditional: true, // traditional EDF instead of EDF-VD
+    traditional: false, // traditional EDF instead of EDF-VD
     workDonePerClock: 0.1, // indicating amount of work done in each clock -> main purpose: customizing the simulation for floating point values (example: a CPU with speed less than one)
     frequency: 10, // f clock per time unit => (f * wpc) operation done in time unit = CPU Speed
     initialSystemLevel: LO,
   },
   tasks: {
     n: 4, // number of tasks
-    u: 1, // total system utilization
-    CF: 2, // criticality factor, > 1
-    CP: 0.5, // criticality proportion, < 1
+    u: 0.8, // total system utilization
+    CF: 4, // criticality factor, > 1
+    CP: 0.44, // criticality proportion, < 1
     minPeriod: 5,
     maxPeriod: 20,
   },
   log: {
     enabled: true,
     setting: {
-      time: false,
+      time: true,
       utilization: true,
-      arrival: false,
+      arrival: true,
       feasibilityTest: true,
-      preemption: false,
+      preemption: true,
       overrun: true,
-      jobFinish: false,
+      jobFinish: true,
       deadlineMiss: true,
-      dispatch: false,
+      dispatch: true,
       failure: true,
-      schedule: false,
-      readyQ: false,
-      clock: false,
+      schedule: true,
+      readyQ: true,
+      clock: true,
     }
   }
 }

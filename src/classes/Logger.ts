@@ -235,7 +235,7 @@ export class Logger {
       console.log("~~~~~~~~~~~~~~~~~~~~~~~~~~SCHEDULE~~~~~~~~~~~~~~~~~~~~~~~~~~");
       const times = Object.keys(this.scheduler.mapping);
       // @ts-ignore
-      const modeChangeTime = this.stats.modeChange.time ? times.map(time => ([[time],  time - this.stats.modeChange?.time])).filter(i => i[1] >= 0).sort((a, b) => Number(a[1]) - Number(b[1]))[0][0]: Infinity;
+      const modeChangeTime = this.stats.modeChange.time ? times.map(time => ([[time],  time - this.stats.modeChange?.time])).filter(i => i[1] >= 0).sort((a, b) => Number(a[1]) - Number(b[1]))?.[0]?.[0]: Infinity;
       times
         .sort((a, b) => Number(a) - Number(b))
         .forEach((time) => {
